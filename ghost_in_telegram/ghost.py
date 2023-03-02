@@ -6,10 +6,11 @@ from telegram import Update
 from telegram.ext import filters, MessageHandler, ApplicationBuilder, CommandHandler, ContextTypes
 
 
-TOKEN ="YOUR_TELEGRAM_TOKEN"
-openai.api_key = "YOUR_OPENAI_API_KEY"
+# TOKEN ="YOUR_TELEGRAM_TOKEN"
+# openai.api_key = "YOUR_OPENAI_API_KEY"
 
-imprint  = "alpha"
+
+imprint = sys.argv[1]
 print("\nInjecting Nerual Imprint: "+ str(imprint)+" ...")
 
 imprint_path = "IMPRINTS/"+imprint+".ni"

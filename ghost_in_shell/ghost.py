@@ -4,6 +4,8 @@ import sys
 #PUT YOUR OPENAI API KEY HERE:
 #openai.api_key = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 
+
+
 imprint = sys.argv[1]
 #imprint = "test"
 print("\nInjecting Nerual Imprint: "+ str(imprint)+" ...")

@@ -1,5 +1,4 @@
 #!/bin/bash
-pip install openai
 echo ' ________  ___  ___  ________  ________  _________   
 |\   ____\|\  \|\  \|\   __  \|\   ____\|\___   ___\ 
 \ \  \___|\ \  \\\  \ \  \|\  \ \  \___|\|___ \  \_| 
@@ -19,7 +18,7 @@ if [ ! -d "IMPRINTS" ]; then
 fi
 
 menu(){
-echo "---------------------------Current imprints:---------------------------"
+echo "---------------------------Available imprints:-------------------------"
 ls IMPRINTS/*.ni | xargs -n 1 basename | sed -e 's/\.ni$//'
 echo "-----------------------------------------------------------------------"
 
@@ -54,10 +53,6 @@ done
 
 menu
 
-
-# read -p "Inject imprint: " imprint_name
-
-# python ghost.py $imprint_name
 
 
 
