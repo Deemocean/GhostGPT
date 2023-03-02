@@ -53,6 +53,4 @@ done
 
 menu
 
-In
-
 
