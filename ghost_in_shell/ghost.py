@@ -2,7 +2,7 @@ import openai
 import sys
 
 #PUT YOUR OPENAI API KEY HERE:
-openai.api_key = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+#openai.api_key = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 
 imprint = sys.argv[1]
 #imprint = "test"
