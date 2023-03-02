@@ -11,7 +11,8 @@ from telegram.ext import filters, MessageHandler, ApplicationBuilder, CommandHan
 
 
 imprint = sys.argv[1]
-print("\nInjecting Nerual Imprint: "+ str(imprint)+" ...")
+print("\nInjecting Nerual imprint: "+ str(imprint)+" ...")
+print("\n*Note: type [eject] to eject imprint <"+str(imprint)+"> from ghost")
 
 imprint_path = "IMPRINTS/"+imprint+".ni"
 

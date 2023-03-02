@@ -7,8 +7,8 @@ import sys
 
 
 imprint = sys.argv[1]
-#imprint = "test"
-print("\nInjecting Nerual Imprint: "+ str(imprint)+" ...")
+print("\nInjecting Nerual imprint: "+ str(imprint)+" ...")
+print("\n*Note: type [eject] to eject imprint <"+str(imprint)+"> from ghost")
 
 imprint_path = "IMPRINTS/"+imprint+".ni"
 
@@ -37,7 +37,7 @@ def save(history, path):
     nifile.close()
 
 usr_input=""
-while (usr_input!="exit"):
+while (usr_input!="eject"):
     usr_input=input("YOU: ")
-    if(usr_input!="exit"):
+    if(usr_input!="eject"):
       print("GHOST: "+chat(chat_history, usr_input))
