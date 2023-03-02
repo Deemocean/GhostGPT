@@ -5,7 +5,6 @@ import sys
 #openai.api_key = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 
 
-
 TOKEN_REQUEST_LIMIT = 4096
 
 imprint = sys.argv[1]
@@ -52,10 +51,14 @@ usr_input=""
 while (usr_input!="eject"):
     usr_input=input("YOU: ")
     if(usr_input!="eject"):
-      if(token_est(chat_history)<TOKEN_REQUEST_LIMIT):
-          token_outbound_count = 0
-          print("GHOST:"+chat(chat_history, usr_input))
-      else:
-          token_outbound_count = token_outbound_count + 1
-          chat_history = rm_history(chat_history,imprint_path,token_outbound_count)
-          print("GHOST[Losing Old Memory]:"+chat(chat_history, usr_input))
+      try:
+        if(token_est(chat_history)<TOKEN_REQUEST_LIMIT):
+            token_outbound_count = 0
+            print("GHOST:"+chat(chat_history, usr_input))
+        else:
+            token_outbound_count = token_outbound_count + 1
+            chat_history = rm_history(chat_history,imprint_path,token_outbound_count)
+            print("GHOST[Losing Old Memories]:"+chat(chat_history, usr_input))
+      except:
+            print("GHOST: Error :(...")
+

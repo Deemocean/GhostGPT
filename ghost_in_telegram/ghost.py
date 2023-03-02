@@ -2,12 +2,13 @@ import openai
 import sys
 import logging
 from telegram import Update
+from telegram.constants import ParseMode
+from telegram.helpers import escape_markdown
 from telegram.ext import filters, MessageHandler, ApplicationBuilder, CommandHandler, ContextTypes
 
 
 # TOKEN ="YOUR_TELEGRAM_TOKEN"
 # openai.api_key = "YOUR_OPENAI_API_KEY"
-
 
 
 TOKEN_REQUEST_LIMIT = 4096
@@ -52,7 +53,7 @@ def rm_history(history,path,n):
     return shorter_history
 
 def token_est(history):
-    return len(str(history))/1.2
+    return len(str(history))/1.0
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -60,31 +61,60 @@ logging.basicConfig(
 )
 
 async def menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await context.bot.send_message(chat_id=update.effective_chat.id, text="I'm a bot, please talk to me!")
+    await context.bot.send_message(chat_id=update.effective_chat.id, text="/gst--talk to ghost /img--generate img from Dall-E")
 
 async def gst(update: Update, context: ContextTypes.DEFAULT_TYPE):
     global token_outbound_count
     global chat_history
     usr_input = update.effective_message.text[5:]
+    try:
+        if(token_est(chat_history)<TOKEN_REQUEST_LIMIT):
+            token_outbound_count = 0
+            resp = chat(chat_history, usr_input)
+        else:
+            token_outbound_count = token_outbound_count + 1
+            chat_history = rm_history(chat_history,imprint_path,token_outbound_count)
+            resp= "[Losing Old Memories]: "+chat(chat_history, usr_input)
+    except:
+        resp = "error :(..."
 
-    if(token_est(chat_history)<TOKEN_REQUEST_LIMIT):
-        token_outbound_count = 0
-        resp = chat(chat_history, usr_input)
-    else:
-          token_outbound_count = token_outbound_count + 1
-          chat_history = rm_history(chat_history,imprint_path,token_outbound_count)
-          resp= "*[Losing Old Memory]: "+chat(chat_history, usr_input)
 
-    await context.bot.send_message(chat_id=update.effective_chat.id, text=resp)
+    #resp=escape_markdown(resp, version=2)
+    try:
+        await context.bot.send_message(chat_id=update.effective_chat.id, text=resp,parse_mode=ParseMode.MARKDOWN_V2)
+    except:
+        await context.bot.send_message(chat_id=update.effective_chat.id, text=resp)
+
+async def img(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    usr_input = update.effective_message.text[5:]
+    try:
+        response = openai.Image.create(
+            prompt=usr_input,
+            n=1,
+            size="1024x1024"
+            )
+        resp = response['data'][0]['url']
+    except:
+        resp = "error :(..."
+   
+
+    try:
+        await context.bot.send_message(chat_id=update.effective_chat.id, text=resp,parse_mode=ParseMode.MARKDOWN_V2)
+    except:
+        await context.bot.send_message(chat_id=update.effective_chat.id, text=resp)
+
 
 if __name__ == '__main__':
     application = ApplicationBuilder().token(TOKEN).build()
     
     start_handler = CommandHandler('menu', menu)
     gst_handler = CommandHandler('gst', gst)
+    img_handler = CommandHandler('img', img)
 
     application.add_handler(start_handler)
     application.add_handler(gst_handler)
+    application.add_handler(img_handler)
     
     application.run_polling()
 
