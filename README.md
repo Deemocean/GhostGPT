@@ -10,9 +10,17 @@ For both implementations of Ghost(shell, telegram), you at least need Python and
 ```
 pip install openai
 ```
-For telegram, you will also need to install the telegram api module:
+And generate a OpenAI's API KEY from https://platform.openai.com/account/api-keys, fill that in `ghost.py`
+```
+# openai.api_key = "YOUR_OPENAI_API_KEY"
+```
+For the Telegram implementation, you will also need to install the telegram api module:
 ```
 pip install python-telegram-bot --upgrade
+```
+And generate a bot token from bot father(https://telegram.me/BotFather) , fill that in `ghost.py`
+```
+TOKEN ="YOUR_TELEGRAM_TOKEN"
 ```
 
 
@@ -25,6 +33,7 @@ Under the folder of each version, you will find a shell script called `gst.sh` w
 
 ## Ghost in the Shell
 <img width="1139" alt="Screenshot 2023-03-01 at 8 26 35 PM" src="https://user-images.githubusercontent.com/39002684/222306986-b93f7675-b986-41c0-9efe-4fcc1726ea4a.png">
+
 ## Ghost in the Telegram
 <img width="607" alt="Screenshot 2023-03-01 at 8 27 37 PM" src="https://user-images.githubusercontent.com/39002684/222307122-82ddcd05-540d-4a72-a359-677469f69ac6.png">
 
