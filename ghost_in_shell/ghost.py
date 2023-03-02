@@ -5,7 +5,6 @@ import sys
 #openai.api_key = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 
 
-
 imprint = sys.argv[1]
 print("\nInjecting Nerual imprint: "+ str(imprint)+" ...")
 print("\n*Note: type [eject] to eject imprint <"+str(imprint)+"> from ghost")
