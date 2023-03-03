@@ -39,10 +39,11 @@ Under the folder of each version, you will find a shell script called `gst.sh` w
 
 ## Ghost in the Telegram
 It is easy to deploy Ghost onto linux servers, more features with editing imprints in telegram client, and UI is in progress :)
-As here we are going to call either the chatbot or DALL-E through commands `/gst` and `/img`, group chat is natually supported 
+As here we are going to call either the chatbot or DALL-E through commands `/gst`(ghost) and `/imgc`(image create), group chat is natually supported 
 
 <img width="607" alt="Screenshot 2023-03-01 at 8 27 37 PM" src="https://user-images.githubusercontent.com/39002684/222307122-82ddcd05-540d-4a72-a359-677469f69ac6.png">
 
-<img width="700" alt="Screenshot 2023-03-02 at 6 27 08 PM" src="https://user-images.githubusercontent.com/39002684/222587287-7845ab73-f62c-47bf-afac-b4345b1c29b4.png">
+<img width="491" alt="Screenshot 2023-03-02 at 9 11 11 PM" src="https://user-images.githubusercontent.com/39002684/222614214-c477078c-9610-4abe-93da-c2c6d0d95827.png">
+
 
 Of course, you can let them share the same `IMPRINTS` folder so they are sharing the same memories across platforms
