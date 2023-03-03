@@ -74,7 +74,7 @@ async def gst(update: Update, context: ContextTypes.DEFAULT_TYPE):
         else:
             token_outbound_count = token_outbound_count + 1
             chat_history = rm_history(chat_history,imprint_path,token_outbound_count)
-            resp= "[Losing Old Memories]: "+chat(chat_history, usr_input)
+            resp= "[Losing Old Memories]"+chat(chat_history, usr_input)
     except:
         resp = "error :(..."
 
@@ -85,7 +85,7 @@ async def gst(update: Update, context: ContextTypes.DEFAULT_TYPE):
     except:
         await context.bot.send_message(chat_id=update.effective_chat.id, text=resp)
 
-async def img(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def imgc(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     usr_input = update.effective_message.text[5:]
     try:
@@ -98,11 +98,26 @@ async def img(update: Update, context: ContextTypes.DEFAULT_TYPE):
     except:
         resp = "error :(..."
    
+    await context.bot.send_photo(chat_id=update.effective_chat.id, photo=resp)
 
-    try:
-        await context.bot.send_message(chat_id=update.effective_chat.id, text=resp,parse_mode=ParseMode.MARKDOWN_V2)
-    except:
-        await context.bot.send_message(chat_id=update.effective_chat.id, text=resp)
+# async def imgm(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+#     file_id = update.document.file_id
+#     new_file = await bot.get_file(file_id)
+#     await new_file.download_to_drive()
+
+#     try:
+#         response = openai.Image.create(
+#             prompt=usr_input,
+#             n=1,
+#             size="1024x1024"
+#             )
+#         resp = response['data'][0]['url']
+#     except:
+#         resp = "error :(..."
+   
+#         await context.bot.send_document(chat_id=update.effective_chat.id, document=resp)
+
 
 
 if __name__ == '__main__':
@@ -110,11 +125,11 @@ if __name__ == '__main__':
     
     start_handler = CommandHandler('menu', menu)
     gst_handler = CommandHandler('gst', gst)
-    img_handler = CommandHandler('img', img)
+    imgc_handler = CommandHandler('imgc', imgc)
 
     application.add_handler(start_handler)
     application.add_handler(gst_handler)
-    application.add_handler(img_handler)
+    application.add_handler(imgc_handler)
     
     application.run_polling()
 
