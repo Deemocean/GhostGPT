@@ -34,7 +34,7 @@ do
 
         "Inject an imprint")
             read -p "Inject imprint: " imprint_name
-            python ghost.py $imprint_name
+            python3 ghost.py $imprint_name
             menu;;
 
         "Wipe an imprint")   
@@ -44,7 +44,7 @@ do
             ;;
 
         "Exit")
-            break
+            exit
             ;;
         *) echo "invalid option $REPLY";;
     esac
