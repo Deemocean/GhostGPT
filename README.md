@@ -7,7 +7,7 @@ Ghost is a ChatBot based on ChatGPT that runs in your terminal and other platfor
 
 ## Requirements
 Ghost is developed and tested under MacOS.
-For both implementations of Ghost(shell, telegram), you at least need Python 3.11 and openai module installed:
+For both implementations of Ghost(shell, telegram), you at least need Python 3.7+ and openai module installed:
 ```
 pip install openai
 ```
