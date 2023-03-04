@@ -28,8 +28,11 @@ with open ('config.txt', 'w') as config:
         if ind == -1:
             #New value not in config file.
             opt = input("INPUT NEW " + option +  ": ")
-            config.write(option + ", " + opt + "\n")
-            print(" New value registered!\n")
+            if opt != "":
+                config.write(option + ", " + opt + "\n")
+                print("New value registered!\n")
+            else:
+                print("Value ignored.\n")
         else:
             #Value previously in config file.
             print("PREV VALUE: " + old_contents[ind])
