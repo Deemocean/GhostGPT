@@ -11,18 +11,13 @@ For both implementations of Ghost(shell, telegram), you at least need Python 3.7
 ```
 pip install openai
 ```
-And generate a OpenAI's API KEY from https://platform.openai.com/account/api-keys, fill that using the "Configure" menu option in the shell script, or create/append configure.txt with the line:
-```
-API_KEY,  #YOUR KEY HERE#
-```
+And generate a OpenAI's API KEY from https://platform.openai.com/account/api-keys, fill that using the "Configure" menu option in the shell script.
+
 For the Telegram implementation, you will also need to install the telegram api module:
 ```
 pip install python-telegram-bot --upgrade
 ```
-And generate a bot token from bot father(https://telegram.me/BotFather) , fill that in like the API KEY in the same manner. If you want to edit the config.txt file yourself, add the line:
-```
-TELEGRAM_TOKEN,  #YOUR TELEGRAM TOKEN HERE#
-```
+And generate a bot token from bot father(https://telegram.me/BotFather) , fill that in like the API KEY in the same manner.
 
 ## Usage
 Under the folder of each version, you will find a shell script called `gst.sh` which is a gateway for configuring your key/token/preferences, creating new imprints, injecting existing imprints into ghost, or wiping imprints clean. This is simply started by calling:
