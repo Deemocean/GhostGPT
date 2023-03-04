@@ -1,25 +1,22 @@
 import openai
 import sys
 
-import csv
-fields = []
-contents=[]
+import json
 #Get options.
+config_dict = {}
+data_file_path = '../config.json'
 try:
-    with open ('../config.txt', 'r') as config:
-        config_reader = csv.reader(config)
-        read_config = [opt for opt in config_reader]
-        fields = [entry[0] for entry in read_config]
-        contents=[entry[1] for entry in read_config]
-except FileNotFoundError:
+    with open (data_file_path) as config:
+        config_dict = json.load(config)
+except (FileNotFoundError, json.decoder.JSONDecodeError):
     print("No valid config file found!\nRun either the shell script or the python script.")
     exit()
 
 key = ""
 
 try:
-    key = contents[fields.index("API_KEY")]
-except ValueError:
+    key = config_dict["API_KEY"]
+except KeyError:
     print("No openAI token found!")
     exit()
 openai.api_key = key
