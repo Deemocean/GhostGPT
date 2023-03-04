@@ -22,11 +22,11 @@ echo "---------------------------Available imprints:-------------------------"
 ls IMPRINTS/*.ni | xargs -n 1 basename | sed -e 's/\.ni$//'
 echo "-----------------------------------------------------------------------"
 
-options=("Create a clean imprints" "Inject an imprint" "Wipe an imprint" "Exit")
+options=("Create a clean imprint" "Inject an imprint" "Wipe an imprint" "Exit" "Configure")
 select opt in "${options[@]}"
 do
     case $opt in
-        "Create a clean imprints")
+        "Create a clean imprint")
             read -p "Name your new imprint: " imprint_name
             touch IMPRINTS/${imprint_name}.ni
             echo -n '[]' > IMPRINTS/${imprint_name}.ni
@@ -45,6 +45,10 @@ do
 
         "Exit")
             exit
+            ;;
+        "Configure")
+            python3 ../config.py
+            menu
             ;;
         *) echo "invalid option $REPLY";;
     esac

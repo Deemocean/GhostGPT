@@ -7,34 +7,34 @@ Ghost is a ChatBot based on ChatGPT that runs in your terminal and other platfor
 
 ## Requirements
 Ghost is developed and tested under MacOS.
-For both implementations of Ghost(shell, telegram), you at least need Python and openai module installed:
+For both implementations of Ghost(shell, telegram), you at least need Python 3.11 and openai module installed:
 ```
 pip install openai
 ```
-And generate a OpenAI's API KEY from https://platform.openai.com/account/api-keys, fill that in `ghost.py`
+And generate a OpenAI's API KEY from https://platform.openai.com/account/api-keys, fill that using the "Configure" menu option in the shell script, or create/append configure.txt with the line:
 ```
-openai.api_key = "YOUR_OPENAI_API_KEY"
+API_KEY,  #YOUR KEY HERE#
 ```
 For the Telegram implementation, you will also need to install the telegram api module:
 ```
 pip install python-telegram-bot --upgrade
 ```
-And generate a bot token from bot father(https://telegram.me/BotFather) , fill that in `ghost.py`
+And generate a bot token from bot father(https://telegram.me/BotFather) , fill that in like the API KEY in the same manner. If you want to edit the config.txt file yourself, add the line:
 ```
-TOKEN ="YOUR_TELEGRAM_TOKEN"
+TELEGRAM_TOKEN,  #YOUR TELEGRAM TOKEN HERE#
 ```
-
 
 ## Usage
-Under the folder of each version, you will find a shell script called `gst.sh` which is a gateway for creating new imprints, injecting existing imprints into ghost, or wiping imprints clean. This is simply started by calling:
+Under the folder of each version, you will find a shell script called `gst.sh` which is a gateway for configuring your key/token/preferences, creating new imprints, injecting existing imprints into ghost, or wiping imprints clean. This is simply started by calling:
 ```
 ./gst.sh
 ```
-<img width="795" alt="Screenshot 2023-03-01 at 8 50 59 PM" src="https://user-images.githubusercontent.com/39002684/222310139-590e5cd9-04d1-49e2-aa7f-7fc87abfa8ff.png">
+<img width="502" alt="Screenshot 2023-03-03 at 10 02 59 PM" src="https://user-images.githubusercontent.com/92696735/222872671-3c49ad62-9ad3-4bda-8897-a3ed9582caf0.png">
+
 
 
 ## Ghost in the Shell
-<img width="795" alt="Screenshot 2023-03-01 at 8 49 55 PM" src="https://user-images.githubusercontent.com/39002684/222309983-29f0228a-d7e3-41e9-abda-ba9f7a9b8faf.png">
+<img width="502" alt="Screenshot 2023-03-03 at 10 04 31 PM" src="https://user-images.githubusercontent.com/92696735/222872738-eeedb10e-3c47-450e-adb6-ec9a7acdd6c1.png">
 
 
 ## Ghost in the Telegram
