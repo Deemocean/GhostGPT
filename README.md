@@ -42,3 +42,8 @@ As here we are going to call either the chatbot or DALL-E through commands `/gst
 
 
 Of course, you can let them share the same `IMPRINTS` folder so they are sharing the same memories across platforms
+
+## Possible Future Updates
+1. Add more parameters of the model into the imprint
+2. Teach Ghost to do Google search before it replies-(by inputting Google API response of the prompt, and telling ghost it is the search result beforehand)
+3. and more
