@@ -6,10 +6,43 @@ from telegram.constants import ParseMode
 from telegram.helpers import escape_markdown
 from telegram.ext import filters, MessageHandler, ApplicationBuilder, CommandHandler, ContextTypes
 
+#Change these lines if you don't want to use the config file.
+key = "" #openAI key
+tt = "" #Telegram token
 
-# TOKEN ="YOUR_TELEGRAM_TOKEN"
-# openai.api_key = "YOUR_OPENAI_API_KEY"
 
+#The following code reads the config file if key or tt not set.
+#---------------------------------------------------------------------------------------
+#Get options.
+if key =="" or tt == "":
+    import csv
+    fields = []
+    contents=[]
+    try:
+        with open ('../config.txt', 'r') as config:
+            config_reader = csv.reader(config)
+            read_config = [opt for opt in config_reader]
+            fields = [entry[0] for entry in read_config]
+            contents=[entry[1] for entry in read_config]
+    except FileNotFoundError:
+    print("No valid config file found!\nRun either the shell script or the python script.")
+        exit()
+
+    try:
+        key = contents[fields.index("TELEGRAM_TOKEN")]
+    except ValueError:
+        print("No Telegram token found!")
+        exit()
+
+    try:
+        key = contents[fields.index("API_KEY")]
+    except ValueError:
+        print("No openAI token found!")
+        exit()
+    
+#---------------------------------------------------------------------------------------
+openai.api_key = key
+TOKEN = tt
 
 TOKEN_REQUEST_LIMIT = 4096
 token_outbound_count = 0

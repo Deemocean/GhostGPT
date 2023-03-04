@@ -1,8 +1,28 @@
 import openai
 import sys
 
-#PUT YOUR OPENAI API KEY HERE:
-#openai.api_key = ""
+import csv
+fields = []
+contents=[]
+#Get options.
+try:
+    with open ('../config.txt', 'r') as config:
+        config_reader = csv.reader(config)
+        read_config = [opt for opt in config_reader]
+        fields = [entry[0] for entry in read_config]
+        contents=[entry[1] for entry in read_config]
+except FileNotFoundError:
+    print("No valid config file found!\nRun either the shell script or the python script.")
+    exit()
+
+key = ""
+
+try:
+    key = contents[fields.index("API_KEY")]
+except ValueError:
+    print("No openAI token found!")
+    exit()
+openai.api_key = key
 
 
 TOKEN_REQUEST_LIMIT = 4096
