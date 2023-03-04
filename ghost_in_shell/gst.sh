@@ -49,7 +49,7 @@ do
             exit
             ;;
         "Configure")
-            python3 config.py
+            python3 ../config.py
             menu
             ;;
         *) echo "invalid option $REPLY";;

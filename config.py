@@ -4,10 +4,10 @@ import os
 options = ["API_KEY", "TELEGRAM_TOKEN"]
 old_fields = []
 old_contents=[]
-
+config_path = '../config.txt'
 #Get old options.
 try:
-    with open ('config.txt', 'r') as config:
+    with open (config_path, 'r') as config:
         config_reader = csv.reader(config)
         old_config = [opt for opt in config_reader]
         old_fields = [entry[0] for entry in old_config]
@@ -16,7 +16,7 @@ except FileNotFoundError:
     pass
 
 print("Welcome to the configurer!\nPress return/enter to not change a preference.\n")
-with open ('config.txt', 'w') as config:
+with open (config_path, 'w') as config:
     for option in options:
         ind = -1
         try:
@@ -45,5 +45,5 @@ with open ('config.txt', 'w') as config:
                 #No change wanted.
                 config.write(option + ", " + old_contents[ind] + "\n")
                 print(" No change made.\n")
-os.chmod('config.txt', 0o600)       
+os.chmod(config_path, 0o600)       
 

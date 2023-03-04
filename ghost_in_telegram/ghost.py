@@ -25,7 +25,7 @@ if key =="" or tt == "":
             fields = [entry[0] for entry in read_config]
             contents=[entry[1] for entry in read_config]
     except FileNotFoundError:
-    print("No valid config file found!\nRun either the shell script or the python script.")
+        print("No valid config file found!\nRun either the shell script or the python script.")
         exit()
 
     try:
