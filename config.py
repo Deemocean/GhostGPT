@@ -17,7 +17,7 @@ except json.decoder.JSONDecodeError:
 
 
 new_config = {}
-print("Welcome to the configurer!\nPress return/enter to not change a preference.\n")
+print("Welcome to the configurer!\nPress return/enter to not change a preference.\nEnter 'delete' to remove data.\n")
 with open (config_path, 'w') as config:
     for option in options:
         is_filled = False
@@ -31,19 +31,24 @@ with open (config_path, 'w') as config:
         if not is_filled:
             #New value not in config file.
             opt = input("INPUT NEW " + option +  ": ")
-            if opt != "":
+
+            if opt == "" or opt.lower() == "delete":
+                print("Value ignored.\n")
+            else:
                 new_config[option] = opt
                 print("New value registered!\n")
-            else:
-                print("Value ignored.\n")
         else:
             #Value previously in config file.
             print("PREV VALUE: " + old_config[option])
             opt = input("UPDATE " + option +  ": ")
-            if opt != "":
+
+            if opt == 'delete':
+                #Field to not be included.
+                print("Field deleted.\n")
+            elif opt != "":
                 #Value updated.
                 new_config[option] = opt
-                print("Change Successful!\n")
+                print("Change successful!\n")
             else:
                 #No change wanted.
                 new_config[option] = old_config[option]
