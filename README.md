@@ -7,6 +7,7 @@ Ghost is a ChatBot based on the GPT3.5-turbo/DALLE model that runs in your termi
 
 ## Requirements
 Ghost is developed and tested under MacOS/Linux
+
 First, you need to install the required libraries, in the menu(`./gst.sh`), select:
 ```
 4) [Config] -> 1) [Install] Required Libs
