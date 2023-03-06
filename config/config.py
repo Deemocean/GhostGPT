@@ -4,8 +4,6 @@ import json
 
 options = ["OPENAI_KEY", "TELEGRAM_TOKEN"]
 config_path = 'config/config.json'
-old_config = {}
-
 command = sys.argv[1]
 
 blue = '\033[38;5;33m'
@@ -13,6 +11,7 @@ no_color = '\033[0m'
 
 
 def config_keys(): 
+    old_config = {}
     #Get old options.
     try:
         with open (config_path) as config:
