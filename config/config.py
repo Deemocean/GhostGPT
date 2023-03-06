@@ -69,18 +69,20 @@ def print_keys():
     try:
         with open (config_path) as config:
             config_dict = json.load(config)
+        try:
+            open_ai_key  = config_dict[options[0]]
+        except KeyError:
+            pass
+
+        try:
+            telegram_token = config_dict[options[1]]
+        except KeyError:
+            pass
+
     except (FileNotFoundError, json.decoder.JSONDecodeError):
         pass
 
-    try:
-        open_ai_key  = config_dict[options[0]]
-    except KeyError:
-        pass
 
-    try:
-        telegram_token = config_dict[options[1]]
-    except KeyError:
-        pass
 
     print("OpenAI KEY: "+'\033[38;5;33m' +open_ai_key+ '\033[0;0m', end='\n')
     print("Telegram TOKEN: "+'\033[38;5;33m'+telegram_token+ '\033[0;0m', end='\n')
