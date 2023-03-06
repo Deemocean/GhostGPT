@@ -4,7 +4,7 @@ import sys
 import json
 #Get options.
 config_dict = {}
-data_file_path = '../config.json'
+data_file_path = 'config/config.json'
 try:
     with open (data_file_path) as config:
         config_dict = json.load(config)
@@ -15,7 +15,7 @@ except (FileNotFoundError, json.decoder.JSONDecodeError):
 key = ""
 
 try:
-    key = config_dict["API_KEY"]
+    key = config_dict["OPENAI_KEY"]
 except KeyError:
     print("No openAI token found!")
     exit()
@@ -75,7 +75,7 @@ while (usr_input!="eject"):
             else:
                 token_outbound_count = token_outbound_count + 1
                 chat_history = rm_history(chat_history,imprint_path,token_outbound_count)
-                print("GHOST[Losing Old Memories]:"+chat(chat_history, usr_input))
+                print("GHOST[MEM FADING]:"+chat(chat_history, usr_input))
         except:
             print("GHOST: -_- ERROR")
 

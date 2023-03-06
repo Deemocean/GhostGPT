@@ -9,7 +9,7 @@ from telegram.ext import filters, MessageHandler, ApplicationBuilder, CommandHan
 import json
 #Get options.
 config_dict = {}
-data_file_path = '../config.json'
+data_file_path = 'config/config.json'
 try:
     with open (data_file_path) as config:
         config_dict = json.load(config)
@@ -21,7 +21,7 @@ key = ""
 tg_token=""
 
 try:
-    key = config_dict["API_KEY"]
+    key = config_dict["OPENAI_KEY"]
 except KeyError:
     print("No openAI key found!")
     exit()
@@ -98,9 +98,9 @@ async def gst(update: Update, context: ContextTypes.DEFAULT_TYPE):
         else:
             token_outbound_count = token_outbound_count + 1
             chat_history = rm_history(chat_history,imprint_path,token_outbound_count)
-            resp= "[Losing Old Memories]"+chat(chat_history, usr_input)
+            resp= "[MEM FADING]"+chat(chat_history, usr_input)
     except:
-        resp = "error :(..."
+        resp = "Error :("
 
 
     #resp=escape_markdown(resp, version=2)
@@ -112,20 +112,20 @@ async def gst(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def imgc(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     usr_input = update.effective_message.text[5:]
-    #try:
-    response = openai.Image.create(
-        prompt=usr_input,
-        n=4,
-        size="1024x1024"
-        )
-    img0 = InputMediaPhoto(media=response['data'][0]['url'])
-    img1 = InputMediaPhoto(media=response['data'][1]['url'])
-    img2 = InputMediaPhoto(media=response['data'][2]['url'])
-    img3 = InputMediaPhoto(media=response['data'][3]['url'])
+    try:
+        response = openai.Image.create(
+            prompt=usr_input,
+            n=4,
+            size="1024x1024"
+            )
+        img0 = InputMediaPhoto(media=response['data'][0]['url'])
+        img1 = InputMediaPhoto(media=response['data'][1]['url'])
+        img2 = InputMediaPhoto(media=response['data'][2]['url'])
+        img3 = InputMediaPhoto(media=response['data'][3]['url'])
 
-    await context.bot.send_media_group(chat_id=update.effective_chat.id, media=[img0,img1,img2,img3])
-    #except:
-     #   await context.bot.send_message(chat_id=update.effective_chat.id, text="error :(...")
+        await context.bot.send_media_group(chat_id=update.effective_chat.id, media=[img0,img1,img2,img3])
+    except:
+        await context.bot.send_message(chat_id=update.effective_chat.id, text="error :(...")
     #await context.bot.send_photo(chat_id=update.effective_chat.id, photo=resp)
 
 # async def imgm(update: Update, context: ContextTypes.DEFAULT_TYPE):

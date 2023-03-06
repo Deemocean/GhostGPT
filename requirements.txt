@@ -1,0 +1,2 @@
+openai
+python-telegram-bot
