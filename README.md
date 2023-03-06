@@ -13,8 +13,11 @@ First, you need to install the required libraries, in the menu(`./gst.sh`), sele
 4) [Config] -> 1) [Install] Required Libs
 ```
 Second, fill in the nessary API keys(if you are not gonna run it on telegram, you dont need the bot token)
+
 Generate a OpenAI's API KEY from https://platform.openai.com/account/api-keys
+
 Generate a bot token from bot father: https://telegram.me/BotFather
+
 In the menu, select:
 ```
 4) [Config] -> 2) [Config] Keys
