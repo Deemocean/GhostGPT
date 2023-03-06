@@ -25,7 +25,7 @@ do
 
         "Telegram")
             read -p "[Inject] imprint: " imprint_name
-            python3 ghost/ghost_in_telegram.py $imprint_name
+            python3 ghost/ghost_in_telegram.py $imprint_name > /dev/null &
             menu
             ;;
 
@@ -110,5 +110,4 @@ done
 }
 
 menu
-
 
