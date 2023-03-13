@@ -117,7 +117,7 @@ async def gst(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def wipe(update: Update, context: ContextTypes.DEFAULT_TYPE):
     global chat_history
-    wipe_history(chat_history, imprint_path)
+    chat_history = wipe_history(chat_history, imprint_path)
     await context.bot.send_message(chat_id=update.effective_chat.id, text="All memories flushed")
 
 
