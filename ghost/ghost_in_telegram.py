@@ -77,9 +77,9 @@ def rm_history(history,path,n):
     return shorter_history
 
 def wipe_history(history,path):
-    shorter_history=[]
-    save(shorter_history,path)
-    return shorter_history
+    history=[]
+    save(history,path)
+    return history
 
 def token_est(history):
     return len(str(history))/1.0
