@@ -66,9 +66,9 @@ def rm_history(history,path,n):
 token_outbound_count = 0
 usr_input=""
 while (usr_input!="eject"):
-    usr_input=input("YOU: ")
+    usr_input=input('\033[38;5;33m' +"YOU"+ '\033[0;0m: ')
     if(usr_input!="eject"):
-        print("GHOST:"+chat(chat_history, usr_input))
+        print('\033[38;5;33m' +"GHOST"+ '\033[0;0m: '+chat(chat_history, usr_input))
         # try:      
         #     if(token_est(chat_history)<TOKEN_REQUEST_LIMIT):
         #         token_outbound_count = 0
