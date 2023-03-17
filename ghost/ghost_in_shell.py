@@ -68,15 +68,16 @@ usr_input=""
 while (usr_input!="eject"):
     usr_input=input('\033[38;5;33m' +"YOU"+ '\033[0;0m: ')
     if(usr_input!="eject"):
-        print('\033[38;5;33m' +"GHOST"+ '\033[0;0m: '+chat(chat_history, usr_input))
-        # try:      
-        #     if(token_est(chat_history)<TOKEN_REQUEST_LIMIT):
-        #         token_outbound_count = 0
-        #         print("GHOST:"+chat(chat_history, usr_input))
-        #     else:
-        #         token_outbound_count = token_outbound_count + 1
-        #         chat_history = rm_history(chat_history,imprint_path,token_outbound_count)
-        #         print("GHOST[MEM FADING]:"+chat(chat_history, usr_input))
-        # except:
-        #     print("GHOST: -_- ERROR")
+       
+        try:      
+            if(token_est(chat_history)<TOKEN_REQUEST_LIMIT):
+                token_outbound_count = 0
+                print('\033[38;5;33m' +"GHOST"+ '\033[0;0m: '+chat(chat_history, usr_input))
+            else:
+                token_outbound_count = token_outbound_count + 1
+                chat_history = rm_history(chat_history,imprint_path,token_outbound_count)
+                print('\033[38;5;33m' +"GHOST[MEM FADING]"+ '\033[0;0m: '+chat(chat_history, usr_input))
+
+        except:
+            print("GHOST: -_- ERROR")
 
