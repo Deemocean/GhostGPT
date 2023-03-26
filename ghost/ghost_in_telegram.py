@@ -76,6 +76,11 @@ def rm_history(history,path,n):
     save(shorter_history,path)
     return shorter_history
 
+def wipe_history(history,path):
+    history=[]
+    save(history,path)
+    return history
+
 def token_est(history):
     return len(str(history))/1.0
 
@@ -85,7 +90,7 @@ logging.basicConfig(
 )
 
 async def menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await context.bot.send_message(chat_id=update.effective_chat.id, text="/gst--talk to ghost /img--generate img from Dall-E")
+    await context.bot.send_message(chat_id=update.effective_chat.id, text="/gst--talk to ghost /imgc--generate img from Dall-E /wipe wipe ghost memory")
 
 async def gst(update: Update, context: ContextTypes.DEFAULT_TYPE):
     global token_outbound_count
@@ -108,6 +113,13 @@ async def gst(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await context.bot.send_message(chat_id=update.effective_chat.id, text=resp,parse_mode=ParseMode.MARKDOWN_V2)
     except:
         await context.bot.send_message(chat_id=update.effective_chat.id, text=resp)
+
+
+async def wipe(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    global chat_history
+    chat_history = wipe_history(chat_history, imprint_path)
+    await context.bot.send_message(chat_id=update.effective_chat.id, text="All memories flushed")
+
 
 async def imgc(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
@@ -154,10 +166,12 @@ if __name__ == '__main__':
     start_handler = CommandHandler('menu', menu)
     gst_handler = CommandHandler('gst', gst)
     imgc_handler = CommandHandler('imgc', imgc)
+    wipe_handler = CommandHandler('wipe', wipe)
 
     application.add_handler(start_handler)
     application.add_handler(gst_handler)
     application.add_handler(imgc_handler)
+    application.add_handler(wipe_handler)
     
     application.run_polling()
 
