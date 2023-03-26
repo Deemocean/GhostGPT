@@ -51,7 +51,7 @@ def chat(history,content):
         temperature=0,
         stream=True)
     msg = ""
-    print("GHOST: ")
+    print('\033[38;5;33m' +"GHOST"+ '\033[0;0m: ')
     for chunk in response:
         try:
             chunk_message = chunk['choices'][0]['delta']['content']
@@ -60,7 +60,7 @@ def chat(history,content):
         except KeyError:
             pass
         
-    print("\n")
+    #print("\n")
     
     history_add(history, "assistant",(msg))
     save(history,imprint_path)
@@ -84,12 +84,11 @@ while (usr_input!="eject"):
         try:      
             if(token_est(chat_history)<TOKEN_REQUEST_LIMIT):
                 token_outbound_count = 0
-
-                print('\033[38;5;33m' +"GHOST"+ '\033[0;0m: '+chat(chat_history, usr_input))
+                chat(chat_history, usr_input)
             else:
                 token_outbound_count = token_outbound_count + 1
                 chat_history = rm_history(chat_history,imprint_path,token_outbound_count)
-                print('\033[38;5;33m' +"GHOST[MEM FADING]"+ '\033[0;0m: '+chat(chat_history, usr_input))
+                chat(chat_history, usr_input)
         except:
             print("GHOST: -_- ERROR") #More useful messages in the future?
 

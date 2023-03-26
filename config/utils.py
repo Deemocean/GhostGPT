@@ -77,7 +77,7 @@ def options_table_print():
     dir = os.listdir("IMPRINTS")
     opts = []
     for i in dir:
-        opts.append("[" + i[0:len(i)-3] + "]")
+        opts.append(i[0:len(i)-3])
     opts = " ".join(opts)
-    print(Align.center(opts, vertical="middle", style=b))
+    print(Align.center(opts, vertical="middle"))
     line_break("")

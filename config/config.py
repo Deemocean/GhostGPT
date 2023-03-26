@@ -93,13 +93,11 @@ def print_options():
         print("No config file found!")
         pass
 
-def load_state():
-    print(blue + "not implemented" + no_color)
+# def load_state():
+#     print(blue + "not implemented" + no_color)
 
 
-
-match command:
-    case "config":
+if command=="config":
         config_keys()
-    case "print_options":
+elif command=="print_options":
         print_options()
