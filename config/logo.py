@@ -3,8 +3,8 @@ import os
 
 size  = os.get_terminal_size().columns
 for i in range(size- 1) :
-    print('*', end = '')
-print('*')
+    print('-', end = '')
+print('-')
 
 message = ['________  ___  ___  ________  ________  _________',   
 '|\   ____\|\  \|\  \|\   __  \|\   ____\|\___   ___\ ',
@@ -28,7 +28,7 @@ mstpt = int((b - len(message))/2)
 ind  = [x+mstpt for x in ind]
 
 for i in range(b):
-    print('*', end = '')
+    print('|', end = '')
     for ii in range(size -1):
         j = ii + 1
         if ind.count(i) > 0:
@@ -38,13 +38,13 @@ for i in range(b):
             elif (j > stpt) & (j < stpt + len(message[i - mstpt])):
                 a = 0
             elif j == size -1:
-                print('*')
+                print('|')
             else:
                 print(' ', end = '')
         elif j != size - 1:
             print(' ', end = '')
         else:
-            print('*')
+            print('|')
 
 for i in range(size) :
-    print('*', end='')
+    print('-', end='')

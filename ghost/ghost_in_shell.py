@@ -46,12 +46,24 @@ def history_add(history, role, content):
 def chat(history,content):
     unanswered_history = history_add(history,"user",content)
     response = openai.ChatCompletion.create(
-    model="gpt-3.5-turbo",
-    messages=unanswered_history)
-    msg = response['choices'][0]['message']['content']
-    history_add(history, "assistant",msg)
+        model="gpt-3.5-turbo",
+        messages=unanswered_history,
+        temperature=0,
+        stream=True)
+    msg = ""
+    print("GHOST: ")
+    for chunk in response:
+        try:
+            chunk_message = chunk['choices'][0]['delta']['content']
+            msg = msg + chunk_message
+            print(chunk_message, end='', flush=True)
+        except KeyError:
+            pass
+        
+    print("\n")
+    
+    history_add(history, "assistant",(msg))
     save(history,imprint_path)
-    return msg
 
 def save(history, path):
     nifile = open(path, "w")
@@ -72,12 +84,12 @@ while (usr_input!="eject"):
         try:      
             if(token_est(chat_history)<TOKEN_REQUEST_LIMIT):
                 token_outbound_count = 0
+
                 print('\033[38;5;33m' +"GHOST"+ '\033[0;0m: '+chat(chat_history, usr_input))
             else:
                 token_outbound_count = token_outbound_count + 1
                 chat_history = rm_history(chat_history,imprint_path,token_outbound_count)
                 print('\033[38;5;33m' +"GHOST[MEM FADING]"+ '\033[0;0m: '+chat(chat_history, usr_input))
-
         except:
-            print("GHOST: -_- ERROR")
+            print("GHOST: -_- ERROR") #More useful messages in the future?
 
