@@ -1,13 +1,16 @@
 #!/bin/bash
 
 python3 config/logo.py
+create_imprint(){
+    read -p "Name your new imprint: " imprint_name
+    touch IMPRINTS/${imprint_name}.ni
+    echo -n '[]' > IMPRINTS/${imprint_name}.ni
 
+}
 if [ ! -d "IMPRINTS" ]; then
   echo "No directory for Neural Imprints exists. Automatically creating..."
   mkdir "IMPRINTS"
-  read -p "Name your new imprint: " imprint_name
-  touch IMPRINTS/${imprint_name}.ni
-  echo -n '[]' > IMPRINTS/${imprint_name}.ni
+  create_imprint
 fi
 
 choose_platform(){
@@ -41,7 +44,7 @@ done
 
 config(){
     options=("[Install] Required Libs" "[Config] Keys" "[Back]" )
-
+    echo -e "\033[38;5;33mGhost Version 1 Beta\033[0m"
     select opt in "${options[@]}"
 do
     case $opt in
@@ -71,21 +74,18 @@ done
 menu(){
 clear
 python3 config/logo.py
-echo -e "##############|First-Timer? Start with the \033[38;5;33m[Config]\033[0m option|##############"
-echo "---------------------------Enviroment:---------------------------------"
-python3 config/config.py print_keys
-echo "---------------------------Available imprints:-------------------------"
-ls IMPRINTS/*.ni | xargs -n 1 basename | sed -e 's/\.ni$//'
-echo "-----------------------------------------------------------------------"
+if [ ! -e config/config.json ];
+then echo -e "##############|First-Timer? Start with the \033[38;5;33m[Config]\033[0m option|##############"
+fi
+python3 config/config.py print_options
+
 
 options=("[Create] an imprint" "[Inject] an imprint" "[Wipe] an imprint" "[Config]" "[Exit]" )
 select opt in "${options[@]}"
 do
     case $opt in
         "[Create] an imprint")
-            read -p "Name your new imprint: " imprint_name
-            touch IMPRINTS/${imprint_name}.ni
-            echo -n '[]' > IMPRINTS/${imprint_name}.ni
+            create_imprint
             menu;;
 
         "[Inject] an imprint")

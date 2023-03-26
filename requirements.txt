@@ -1,2 +1,3 @@
 openai
 python-telegram-bot
+rich
