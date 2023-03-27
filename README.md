@@ -6,22 +6,10 @@
 Ghost is a ChatBot based on the GPT3.5-turbo/DALLE model that runs in your terminal and on other platforms(Telegram). The unique thing about ghost is that you can create locally stored 'neural imprints' (.ni files) which for now are basically chat histories that shape Ghost's behavior. And you can also load imprints created by other people into Ghost to give it different personalities or features.
 
 ## Requirements
-Ghost is developed and tested under MacOS/Linux
+System: MacOS/Linux
 
-First, you need to install the required libraries, in the menu(`./gst.sh`), select:
-```
-4) [Config] -> 1) [Install] Required Libs
-```
-Second, fill in the nessary API keys(if you are not gonna run it on telegram, you dont need the bot token)
+Python 3.9+ 
 
-Generate a OpenAI's API KEY from https://platform.openai.com/account/api-keys
-
-Generate a bot token from bot father: https://telegram.me/BotFather
-
-In the menu, select:
-```
-4) [Config] -> 2) [Config] Keys
-```
 
 ## Usage
 Clone this project : 
@@ -32,10 +20,27 @@ git clone https://github.com/Deemocean/GhostGPT.git
 ```
 ./gst.sh
 ```
-<img width="1140" alt="Screenshot 2023-03-05 at 7 21 56 PM" src="https://user-images.githubusercontent.com/39002684/222995006-e2a4a3ef-a947-4cd5-b20f-6a3f067e0fe8.png">
+<img width="1138" alt="Screenshot 2023-03-26 at 7 53 31 PM" src="https://user-images.githubusercontent.com/39002684/227813764-d11eb42f-1671-4bcc-ad9f-707111277d50.png">
+
+1) First, you need to install the required libraries, in the menu(`./gst.sh`), select:
+```
+4) [Config] -> 1) [Install] Required Libs
+```
+2) Second, put the keys in
+
+Generate a OpenAI's API KEY from https://platform.openai.com/account/api-keys
+
+Generate a bot token from bot father(if you aren't gonna run it on telegram, you dont need this): https://telegram.me/BotFather
+
+In the menu, select `[Config] Keys`, and fill in the necessary API keys:
+```
+4) [Config] -> 2) [Config] Keys
+```
+
 
 ## Ghost in the Shell
-<img width="829" alt="Screenshot 2023-03-05 at 7 38 42 PM" src="https://user-images.githubusercontent.com/39002684/222995716-95db4f76-5f38-4982-93a6-2694f884fa19.png">
+
+![ezgif com-gif-maker (1)](https://user-images.githubusercontent.com/39002684/227814450-e8487c1b-6615-419a-a370-341000788714.gif)
 
 ## Ghost in the Telegram
 It is easy to deploy Ghost onto linux servers, more features with editing imprints in telegram client, and UI is in progress :)
