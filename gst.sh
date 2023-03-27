@@ -44,7 +44,7 @@ done
 
 config(){
     options=("[Install] Required Libs" "[Config] Keys" "[Back]" )
-    echo -e "\033[38;5;33mGhost Version 1 Beta\033[0m"
+    echo -e "\033[38;5;33mGhost Config Manager[WIP]\033[0m"
     select opt in "${options[@]}"
 do
     case $opt in
