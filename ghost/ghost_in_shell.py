@@ -51,7 +51,7 @@ def chat(history,content):
         temperature=0,
         stream=True)
     msg = ""
-    print('\033[38;5;33m' +"GHOST"+ '\033[0;0m: ')
+    print('\033[38;5;33m' +"GHOST"+ '\033[0;0m: ', end='')
     for chunk in response:
         try:
             chunk_message = chunk['choices'][0]['delta']['content']
@@ -60,7 +60,7 @@ def chat(history,content):
         except KeyError:
             pass
         
-    #print("\n")
+    print('',end='\n')
     
     history_add(history, "assistant",(msg))
     save(history,imprint_path)
