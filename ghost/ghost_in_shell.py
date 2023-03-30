@@ -1,7 +1,11 @@
 import openai
 import sys
 
+from rich.console import Console
+from rich.markdown import Markdown
+console = Console()
 import json
+
 #Get options.
 config_dict = {}
 data_file_path = 'config/config.json'
@@ -50,14 +54,37 @@ def chat(history,content):
         messages=unanswered_history,
         temperature=0,
         stream=True)
+    is_markdown = False
+    try:
+        content.lower().index("markdown")
+        is_markdown = True
+    except ValueError:
+        pass
     msg = ""
-    for chunk in response:
-        try:
-            chunk_message = chunk['choices'][0]['delta']['content']
-            msg = msg + chunk_message
-            print(chunk_message, end='', flush=True)
-        except KeyError:
-            pass
+    if not is_markdown:
+        for chunk in response:
+            try:
+                chunk_message = chunk['choices'][0]['delta']['content']
+                msg = msg + chunk_message
+                print(chunk_message, end='', flush=True)
+            except KeyError:
+                pass
+    else:
+        line = ""
+        for chunk in response:
+            try:
+                chunk_message = chunk['choices'][0]['delta']['content']
+                msg = msg + chunk_message
+                line = line + chunk_message
+                try:
+                    line.index("\n")
+                    console.print(Markdown(line), end='')
+                    line = ""
+                except ValueError:
+                    pass
+            except KeyError:
+
+                pass
         
     print("\n")
     
@@ -79,7 +106,7 @@ usr_input=""
 while (usr_input!="eject"):
     usr_input=input('\033[38;5;33m' +"YOU"+ '\033[0;0m: ')
     if(usr_input!="eject"): 
-        try:      
+        #try:      
             if(token_est(chat_history)<TOKEN_REQUEST_LIMIT):
                 token_outbound_count = 0
                 print('\033[38;5;33m' +"GHOST"+ '\033[0;0m: ', end="")
@@ -89,6 +116,6 @@ while (usr_input!="eject"):
                 chat_history = rm_history(chat_history,imprint_path,token_outbound_count)
                 print('\033[38;5;33m' +"GHOST[MEM FADING]"+ '\033[0;0m: ', end="")
                 chat(chat_history, usr_input)
-        except:
-           print("GHOST: -_- ERROR") #More useful messages in the future?
+       # except:
+        #   print("GHOST: -_- ERROR") #More useful messages in the future?
 

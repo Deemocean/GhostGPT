@@ -12,7 +12,7 @@ console = Console()
 current_programs = ["shell", "telegram"]
 options = [("OPENAI_KEY", "Paste your Open AI key here", []),
  ("TELEGRAM_TOKEN","Paste your telegram token here", []),
- ("DEFAULT_SCRIPT", "Pick one of the following to set your default interface", ["shell", "telegram", "none"]), 
+ ("DEFAULT_SCRIPT", "Pick one of the following to set your default interface", ["Shell", "Telegram", "None"]), 
  ("SAVE_SESSION", "Enter true/false if you want Ghost to remember your last session", ["True", "False"]) ]
 options_list = map(lambda x: x[0], options)
 options_exp = [""]
