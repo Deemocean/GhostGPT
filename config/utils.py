@@ -10,8 +10,8 @@ from rich.align import Align
 console = Console()
 
 current_programs = ["shell", "telegram"]
-options = [("OPENAI_KEY", "Paste your Open AI key here", []),
- ("TELEGRAM_TOKEN","Paste your telegram token here", []),
+options = [("OPENAI_KEY", "Paste your Open AI key here", ["Key"]),
+ ("TELEGRAM_TOKEN","Paste your telegram token here", ["Key"]),
  ("DEFAULT_SCRIPT", "Pick one of the following to set your default interface", ["Shell", "Telegram", "None"]), 
  ("SAVE_SESSION", "Enter true/false if you want Ghost to remember your last session", ["True", "False"]) ]
 options_list = map(lambda x: x[0], options)
@@ -42,7 +42,7 @@ def config_options():
 
     
 def prompt_key(s, o):
-    if (len(o[2]) == 0):
+    if (len(o[2]) == 0) or o[2][0] == "Key":
         return Prompt.ask(blue + s + " " + o[1] + no_color)
     else:
          return Prompt.ask(blue + s + " " + o[1] + no_color, choices = o[2])
@@ -67,6 +67,7 @@ def fill_options_table(current_vals):
             prev_val = current_vals[option[0]]
         except:
             pass
+        prev_val = "[Hidden]" if option[2][0] == "Key" and prev_val != "None" else prev_val
         table.add_row(option[0], prev_val)
 
 def options_table_print():

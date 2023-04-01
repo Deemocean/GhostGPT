@@ -1,5 +1,7 @@
 .DS_Store
 .idea/
-config.txt
+
 **.ni
 *.json
+*.env
+*.pyc

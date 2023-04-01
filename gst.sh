@@ -1,11 +1,10 @@
 #!/bin/bash
-
-python3 config/logo.py
 create_imprint(){
     read -p "Name your new imprint: " imprint_name
-    touch IMPRINTS/${imprint_name}.ni
-    echo -n '[]' > IMPRINTS/${imprint_name}.ni
-
+    if [ ${#imprint_name} != 0 ]; then
+        touch IMPRINTS/${imprint_name}.ni
+        echo -n '[]' > IMPRINTS/${imprint_name}.ni
+    fi
 }
 if [ ! -d "IMPRINTS" ]; then
   echo "No directory for Neural Imprints exists. Automatically creating..."
@@ -14,12 +13,34 @@ if [ ! -d "IMPRINTS" ]; then
 fi
 
 choose_platform(){
-    echo "Inject to platform:"
-    options=("Shell" "Telegram" "Back" )
+    SCRIPT=${DEFAULT_SCRIPT-None}
+    if [ "$SCRIPT" == "None" ]; then
+        echo "Inject to platform:"
+        options=("Shell" "Telegram" "Back" )
 
-    select opt in "${options[@]}"
-do
-    case $opt in
+        select opt in "${options[@]}"
+        do
+            case $opt in
+                "Shell")
+                    read -p "[Inject] imprint: " imprint_name
+                    python3 ghost/ghost_in_shell.py $imprint_name
+                    menu
+                    ;;
+
+                "Telegram")
+                    read -p "[Inject] imprint: " imprint_name
+                    python3 ghost/ghost_in_telegram.py $imprint_name > /dev/null &
+                    menu
+                    ;;
+
+                "Back")
+                    menu
+                    ;;
+
+                *) echo "invalid option $REPLY";;
+            esac
+        done
+    else case $SCRIPT in
         "Shell")
             read -p "[Inject] imprint: " imprint_name
             python3 ghost/ghost_in_shell.py $imprint_name
@@ -38,13 +59,14 @@ do
 
         *) echo "invalid option $REPLY";;
     esac
-done
+
+    fi
 
 }
 
 config(){
     options=("[Install] Required Libs" "[Config] Keys" "[Back]" )
-    echo -e "\033[38;5;33mGhost Version 1.1 Beta\033[0m"
+    echo -e "\033[38;5;33mGhost Version Beta 2\033[0m"
     select opt in "${options[@]}"
 do
     case $opt in
@@ -73,14 +95,20 @@ done
 
 menu(){
 clear
+python3 config/config.py set_env
+set -o allexport
+. ./config/config.env
+set +o allexport
+rm config/config.env
 python3 config/logo.py
+
 if [ ! -e config/config.json ];
 then echo -e "##############|First-Timer? Start with the \033[38;5;33m[Config]\033[0m option|##############"
 fi
 python3 config/config.py print_options
 
 
-options=("[Create] an imprint" "[Inject] an imprint" "[Wipe] an imprint" "[Config]" "[Exit]" )
+options=("[Inject] an imprint" "[Wipe] an imprint" "[Config]" "[Exit]" )
 select opt in "${options[@]}"
 do
     case $opt in
@@ -110,4 +138,3 @@ done
 }
 
 menu
-
