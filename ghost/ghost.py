@@ -13,17 +13,21 @@ class imprint:
     TOKEN_REQUEST_LIMIT = 4096
     token_factor = 1.2
     token_outbound_count = 0
+    printing = True
 
     def log(self, str, **kwargs):
-        print(str, **kwargs)
+        if self.printing:
+            print(str, **kwargs)
     
     def markdown(self, obj, **kwargs):
-        console.print(obj, **kwargs)
+        if self.printing:
+            console.print(obj, **kwargs)
 
     def within_tokens(self):
         return len(str(self.history))/self.token_factor < self.TOKEN_REQUEST_LIMIT
     
-    def __init__(self, name):
+    def __init__(self, name, printing= True):
+        self.printing = printing
         self.name = name.upper()
         self.path = os.path.join("IMPRINTS" , name + ".ni")
         try:
@@ -36,7 +40,7 @@ class imprint:
         self.log("*Note: type [eject] to eject imprint <"+str(self.name)+"> from ghost")
         self.log("Type [delete] to delete the last entry and response from memory.\n")
 
-    def generate():
+    def generate(printing = True):
         temp_num = 0
         temp_name = "temp"
         imprints = os.listdir("IMPRINTS")
@@ -44,15 +48,14 @@ class imprint:
         while temp_name in imprints:
             temp_num = temp_num + 1
             temp_name = "temp" + str(temp_num)
-        return imprint(temp_name)
+        return imprint(temp_name, printing=printing)
     
-    def get():
-        imp = None
+    def get(printing = True):
         try:
             name = sys.argv[1]
-            imp = imprint(name)
+            imp = imprint(name, printing= printing)
         except IndexError:
-            imp = imprint.generate()
+            imp = imprint.generate(printing = printing)
         try:    
             imp.forget = os.environ["FORGET"] == "True"
         except KeyError:
@@ -141,7 +144,6 @@ class imprint:
                 is_markdown = True
             except ValueError:
                 pass
-      
         if not is_markdown:
             for chunk in response:
                 try:
@@ -169,8 +171,6 @@ class imprint:
                 except KeyError:
                     pass
             self.log("\n")
-        
-        
         self.history_add("assistant",msg)
         return head + msg
     

@@ -63,12 +63,11 @@ choose_platform(){
 
 }
 refresh(){
-    
     python3 config/config.py set_env
     set -o allexport
     . ./config/config.env
     rm config/config.env
-    #clear
+    clear
     if [ ! -e config/config.json ];
     then echo -e "##############|First-Timer? Start with the \033[38;5;33m[Config]\033[0m option|##############"
     fi
@@ -101,8 +100,6 @@ config(){
             esac
         done
 }
-
-
 
 menu(){
 options=("[Inject] an imprint" "[Train] an imprint" "[Ignore] default script" "[Wipe] an imprint" "[Config]" "[Exit]"  )
@@ -139,6 +136,5 @@ do
     esac
 done
 }
-
 
 refresh
