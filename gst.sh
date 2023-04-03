@@ -24,19 +24,18 @@ choose_platform(){
                 "Shell")
                     read -p "[Inject] imprint: " imprint_name
                     python3 ghost/ghost_in_shell.py $imprint_name
-                    menu
+                    refresh
                     ;;
 
                 "Telegram")
                     read -p "[Inject] imprint: " imprint_name
                     python3 ghost/ghost_in_telegram.py $imprint_name > /dev/null &
-                    menu
+                    refresh
                     ;;
 
                 "Back")
-                    menu
+                    refresh
                     ;;
-
                 *) echo "invalid option $REPLY";;
             esac
         done
@@ -44,17 +43,17 @@ choose_platform(){
         "Shell")
             read -p "[Inject] imprint: " imprint_name
             python3 ghost/ghost_in_shell.py $imprint_name
-            menu
+            refresh
             ;;
 
         "Telegram")
             read -p "[Inject] imprint: " imprint_name
             python3 ghost/ghost_in_telegram.py $imprint_name > /dev/null &
-            menu
+            refresh
             ;;
 
         "Back")
-            menu
+            refresh
             ;;
 
         *) echo "invalid option $REPLY";;
@@ -63,78 +62,83 @@ choose_platform(){
     fi
 
 }
-
+refresh(){
+    
+    python3 config/config.py set_env
+    set -o allexport
+    . ./config/config.env
+    rm config/config.env
+    #clear
+    if [ ! -e config/config.json ];
+    then echo -e "##############|First-Timer? Start with the \033[38;5;33m[Config]\033[0m option|##############"
+    fi
+    python3 config/logo.py
+    python3 config/config.py print_options
+    menu
+}
 config(){
     options=("[Install] Required Libs" "[Config] Keys" "[Back]" )
-    echo -e "\033[38;5;33mGhost Version Beta 2\033[0m"
+    echo -e "\033[38;5;33mGhost Version Beta 3.2\033[0m"
     select opt in "${options[@]}"
-do
-    case $opt in
-        "[Install] Required Libs")
-            pip install -r requirements.txt --upgrade
-            echo -e "\033[38;5;33m done.\033[0m - if no error, you are good"
-            config
-            ;;
+        do
+            case $opt in
+                "[Install] Required Libs")
+                    pip install -r requirements.txt --upgrade
+                    echo -e "\033[38;5;33m done.\033[0m - if no error, you are good"
+                    config
+                    ;;
 
-        "[Config] Keys")
-            python3 config/config.py config
-            config
-            ;;
+                "[Config] Keys")
+                    python3 config/config.py config
+                    config
+                    ;;
 
-        "[Back]")
-            menu
-            ;;
+                "[Back]")
+                    refresh
+                    ;;
 
-        *) echo "invalid option $REPLY";;
-    esac
-done
-
+                *) echo "invalid option $REPLY";;
+            esac
+        done
 }
 
 
 
 menu(){
-clear
-python3 config/config.py set_env
-set -o allexport
-. ./config/config.env
-set +o allexport
-rm config/config.env
-python3 config/logo.py
-
-if [ ! -e config/config.json ];
-then echo -e "##############|First-Timer? Start with the \033[38;5;33m[Config]\033[0m option|##############"
-fi
-python3 config/config.py print_options
-
-
-options=("[Inject] an imprint" "[Wipe] an imprint" "[Config]" "[Exit]" )
+options=("[Inject] an imprint" "[Train] an imprint" "[Ignore] default script" "[Wipe] an imprint" "[Config]" "[Exit]"  )
 select opt in "${options[@]}"
 do
     case $opt in
-        "[Create] an imprint")
-            create_imprint
-            menu;;
+        "[Train] an imprint")
+            FORGET=False
+            choose_platform
+            ;;
 
         "[Inject] an imprint")
-            choose_platform;;
-
+            FORGET=True
+            choose_platform
+            ;;
+        "[Ignore] default script")
+            DEFAULT_SCRIPT="None"
+            refresh
+            ;;
         "[Wipe] an imprint")   
             read -p "Wipe imprint: " imprint_name
             rm IMPRINTS/${imprint_name}.ni
-            menu
+            refresh
             ;;
-         "[Config]")
+        "[Config]")
             config
             ;;
         "[Exit]")
-            clear
             exit
             ;;
-
         *) echo "invalid option $REPLY";;
+
+
     esac
 done
 }
 
-menu
+
+refresh

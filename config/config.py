@@ -7,10 +7,6 @@ config_path = 'config/config.json'
 env_path = 'config/config.env'
 command = sys.argv[1]
 
-
-
-
-
 def config_keys(): 
 
     has_config = False
@@ -44,7 +40,6 @@ def config_keys():
 
             if not is_filled:
                 #New value not in config file.
-                #opt = input("INPUT NEW " + option +  ": ")
                 opt = utils.prompt_key("INPUT NEW: ", option)
 
                 if opt == "" or opt.lower() == "delete" or opt=="none" :

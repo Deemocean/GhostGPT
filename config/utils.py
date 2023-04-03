@@ -64,7 +64,7 @@ def fill_options_table(current_vals):
     for option in options:
         prev_val = "None"
         try:
-            prev_val = current_vals[option[0]]
+            prev_val = os.environ[option[0]]
         except:
             pass
         prev_val = "[Hidden]" if option[2][0] == "Key" and prev_val != "None" else prev_val
@@ -76,9 +76,11 @@ def options_table_print():
     line_break ("Available imprints:")
     #os.system("ls IMPRINTS/*.ni | xargs -n 1 basename | sed -e 's/\.ni$//'")
     dir = os.listdir("IMPRINTS")
+
     opts = []
     for i in dir:
-        opts.append("[" + i[0:len(i)-3] + "]")
+        opts.append("\[" + i[0:len(i)-3] + "]")
+
     opts = " ".join(opts)
     print(Align.center(opts, vertical="middle", style=b))
     line_break("")
