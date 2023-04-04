@@ -16,7 +16,7 @@ choose_platform(){
     SCRIPT=${DEFAULT_SCRIPT-None}
     if [ "$SCRIPT" == "None" ]; then
         echo "Inject to platform:"
-        options=("Shell" "Telegram" "Back" )
+        options=("Shell" "Telegram" "Discord" "Back" )
 
         select opt in "${options[@]}"
         do
@@ -32,7 +32,11 @@ choose_platform(){
                     python3 ghost/ghost_in_telegram.py $imprint_name > /dev/null &
                     refresh
                     ;;
-
+                "Discord")
+                    read -p "[Inject] imprint: " imprint_name
+                    python3 ghost/ghost_in_discord.py $imprint_name > /dev/null & 
+                    refresh
+                    ;;
                 "Back")
                     refresh
                     ;;
@@ -51,7 +55,11 @@ choose_platform(){
             python3 ghost/ghost_in_telegram.py $imprint_name > /dev/null &
             refresh
             ;;
-
+        "Discord")
+            read -p "[Inject] imprint: " imprint_name
+            python3 ghost/ghost_in_discord.py $imprint_name > /dev/null & 
+            refresh
+            ;;
         "Back")
             refresh
             ;;
@@ -63,10 +71,6 @@ choose_platform(){
 
 }
 refresh(){
-    python3 config/config.py set_env
-    set -o allexport
-    . ./config/config.env
-    rm config/config.env
     clear
     if [ ! -e config/config.json ];
     then echo -e "##############|First-Timer? Start with the \033[38;5;33m[Config]\033[0m option|##############"
@@ -77,7 +81,7 @@ refresh(){
 }
 config(){
     options=("[Install] Required Libs" "[Config] Keys" "[Back]" )
-    echo -e "\033[38;5;33mGhost Version Beta 3.4\033[0m"
+    echo -e "\033[38;5;33mGhost Version Beta 4.1\033[0m"
     select opt in "${options[@]}"
         do
             case $opt in
@@ -99,7 +103,11 @@ config(){
                 *) echo "invalid option $REPLY";;
             esac
         done
-}
+    python3 config/config.py set_env
+    set -o allexport
+    . ./config/config.env
+    rm config/config.env
+    }
 
 menu(){
 options=("[Inject] an imprint" "[Train] an imprint" "[Ignore] default script" "[Wipe] an imprint" "[Config]" "[Exit]"  )
@@ -136,5 +144,8 @@ do
     esac
 done
 }
-
+python3 config/config.py set_env
+set -o allexport
+. ./config/config.env
+rm config/config.env
 refresh

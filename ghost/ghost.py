@@ -9,9 +9,8 @@ class imprint:
     name = ""
     history = []
     forget = True
-    telegram = False
     TOKEN_REQUEST_LIMIT = 4096
-    token_factor = 1.2
+    token_factor = 0.5
     token_outbound_count = 0
     printing = True
 
@@ -81,22 +80,25 @@ class imprint:
         return self.history
 
     def rm_history(self,n):
-        init_size = len(self.history)
-        for entry in self.history:
-            if n > 0 and entry["role"] != "training":
-                i = self.history.index(entry)
-               
-                try:
-                    entry_after = self.history[i + 1]
-                    if entry_after["role"] == "assistant":
-                        self.history.remove(entry_after)
-                        n = n - 1
-                except:
-                    pass
-                self.history.remove(entry)
-                n = n - 1
-        self.save()
-        return init_size - len(self.history)
+        if self.history is not None:
+            init_size = len(self.history)
+            for entry in self.history:
+                if n > 0 and entry["role"] != "training":
+                    i = self.history.index(entry)
+                
+                    try:
+                        entry_after = self.history[i + 1]
+                        if entry_after["role"] == "assistant":
+                            self.history.remove(entry_after)
+                            n = n - 1
+                    except:
+                        pass
+                    self.history.remove(entry)
+                    n = n - 1
+            self.save()
+            return init_size - len(self.history)
+        else:
+            return 0
     
     def delete(self):
         try:
@@ -106,71 +108,57 @@ class imprint:
             pass
         self.save()
 
-    def chat(self, content):
-        head = ""
-        mode = "user" if self.forget else "training"
-        self.history_add(mode,content)
+    def chat(self, content=None, head=""):
+        msg = ""
+        if content is None:
+            content = self.history[len(self.history) -1]["content"]
+        else:
+            self.history_add("user" if self.forget else "training",content)
+
         if (self.within_tokens()):
-            self.log('\033[38;5;33m' + self.name + '\033[0;0m: ', end="")
             self.token_outbound_count = 0
         else:
             self.token_outbound_count = self.token_outbound_count + 1
-            d = self.rm_history(self.token_outbound_count)
-            if (d > 0):
-                self.log('\033[38;5;33m' + self.name +"[MEM FADING]"+ '\033[0;0m: ', end="")
-                msg = "[MEM FADING]: "
+            D = self.rm_history(self.token_outbound_count)
+            if D == 0:
+                head = "[MEM FULL]: "
+
+        unanswered_history = self.history if self.history is not None else [{'role': 'user', 'content': content}]
+        response = None
+        try: 
+            response = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo",
+                messages=list(map(lambda entry: entry if entry["role"][0] != "t" else {'role':'user', 'content':entry['content']}, unanswered_history)),
+                temperature=0,
+                stream=True
+            )
+        except openai.error.InvalidRequestError:
+            if self.history is not None:
+                self.token_outbound_count = self.token_outbound_count + 1
+                diff = self.rm_history(self.token_outbound_count)
+                if diff == 0:
+                    self.log("[MEM OVER CAPACITY]: Has much training data!")
+                    return "[MEM OVER CAPACITY]: Has much training data!"
+                else:
+                    return self.chat(content=None, head = head)
             else:
-                self.log('\033[38;5;33m' + self.name +"[MEM FULL]"+ '\033[0;0m: ', end="")
-                msg = "[MEM FULL]: "
-
-        unanswered_history = []
-        if self.history is not None:
-            mode = "user" if self.forget else "training"
-            unanswered_history = self.history_add(mode, content)
-        else:
-            unanswered_history = [{'role': 'user', 'content': content}]
-
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=list(map(lambda entry: entry if entry["role"] == "user" else {'role':'user', 'content':entry['content']}, unanswered_history)),
-            temperature=0,
-            stream=not self.telegram
-        )
-        msg = ""
-        is_markdown = False
-        if not self.telegram:
+                self.log("Request too long!")
+                return "Request too long!"
+        self.log('\033[38;5;33m' + self.name + head + '\033[0;0m: ', end="")
+        is_markdown = "markdown" in content.lower()
+        line = ""
+        for chunk in response:
             try:
-                content.lower().index("markdown")
-                is_markdown = True
-            except ValueError:
+                chunk_message = chunk['choices'][0]['delta']['content']
+                msg = msg + chunk_message
+                line = line + chunk_message
+                if not is_markdown:
+                    self.log(chunk_message, end = '', flush = True) 
+                elif "\n" in line:
+                    self.markdown(Markdown(line), end='')
+                    line = ""
+            except KeyError:
                 pass
-        if not is_markdown:
-            for chunk in response:
-                try:
-                    chunk_message = chunk['choices'][0]['delta']['content'] 
-                    msg = msg + chunk_message 
-                    if not self.telegram:
-                        self.log(chunk_message, end='', flush=True)
-                except KeyError:
-                    pass
-            if not self.telegram:
-                self.log("\n")
-        elif not self.telegram:
-            line = ""
-            for chunk in response:
-                try:
-                    chunk_message = chunk['choices'][0]['delta']['content']
-                    msg = msg + chunk_message
-                    line = line + chunk_message
-                    try:
-                        line.index("\n")
-                        self.markdown(Markdown(line), end='')
-                        line = ""
-                    except ValueError:
-                        pass
-                except KeyError:
-                    pass
-            self.log("\n")
+        self.log("\n")
         self.history_add("assistant",msg)
         return head + msg
-    

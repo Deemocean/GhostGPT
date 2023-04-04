@@ -19,7 +19,7 @@ except KeyError:
     print("No Telegram token found!")
     exit()
 
-imp = imprint.get(printing= True)
+imp = imprint.get()
 print("\nInjecting Nerual imprint: "+ str(imp.name)+" ...")
 print("\n*Note: type [eject] to eject imprint <"+str(imp.name)+"> from ghost")
 
