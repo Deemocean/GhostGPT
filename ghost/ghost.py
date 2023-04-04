@@ -10,13 +10,15 @@ class imprint:
     history = []
     forget = True
     TOKEN_REQUEST_LIMIT = 4096
-    token_factor = 0.5
+    token_factor = 1.0
     token_outbound_count = 0
     printing = True
-
-    def log(self, str, **kwargs):
+    def log(self, s, head = "", **kwargs):
+        if head != "" or s == "":
+            s = ("\033[38;5;33m" + self.name + head + "\033[0;0m: " +  s)
         if self.printing:
-            print(str, **kwargs)
+            print(s, **kwargs)
+        return s
     
     def markdown(self, obj, **kwargs):
         if self.printing:
@@ -66,24 +68,25 @@ class imprint:
         self.save()
         
     def save(self):
-        with open(self.path, "w") as nifile:
-            nifile.write(str(self.history))
+        if self.path is not None:
+            with open(self.path, "w") as nifile:
+                nifile.write(str(self.history))
 
     def read(self):
-        with open(self.path) as imprint_file:
-            self.history = eval(imprint_file.read())
+        if self.path is not None:
+            with open(self.path) as imprint_file:
+                self.history = eval(imprint_file.read())
     
     def history_add(self, role, content):
         if self.history is not None:
             self.history.append({"role": role, "content": content})
-            self.save()
         return self.history
 
     def rm_history(self,n):
         if self.history is not None:
             init_size = len(self.history)
             for entry in self.history:
-                if n > 0 and entry["role"] != "training":
+                if n > 0 and entry["role"] == "user":
                     i = self.history.index(entry)
                 
                     try:
@@ -95,7 +98,6 @@ class imprint:
                         pass
                     self.history.remove(entry)
                     n = n - 1
-            self.save()
             return init_size - len(self.history)
         else:
             return 0
@@ -106,25 +108,16 @@ class imprint:
             self.history = self.history[0:(len(self.history) -1)]
         except IndexError:
             pass
-        self.save()
 
     def chat(self, content=None, head=""):
         msg = ""
+        head = "[TRAINING]" + head if not self.forget and "[TRAINING]" not in head else head
         if content is None:
             content = self.history[len(self.history) -1]["content"]
         else:
             self.history_add("user" if self.forget else "training",content)
 
-        if (self.within_tokens()):
-            self.token_outbound_count = 0
-        else:
-            self.token_outbound_count = self.token_outbound_count + 1
-            D = self.rm_history(self.token_outbound_count)
-            if D == 0:
-                head = "[MEM FULL]: "
-
         unanswered_history = self.history if self.history is not None else [{'role': 'user', 'content': content}]
-        response = None
         try: 
             response = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
@@ -136,15 +129,15 @@ class imprint:
             if self.history is not None:
                 self.token_outbound_count = self.token_outbound_count + 1
                 diff = self.rm_history(self.token_outbound_count)
-                if diff == 0:
-                    self.log("[MEM OVER CAPACITY]: Has much training data!")
-                    return "[MEM OVER CAPACITY]: Has much training data!"
+                head = "[MEM FULL WARNING]"
+                if diff == 0 or self.history[len(self.history) -1]["content"] != content:
+                    head = "[MEM OVER CAPACITY]"
+                    return self.log("Has too much training data!", head = head)
                 else:
                     return self.chat(content=None, head = head)
             else:
-                self.log("Request too long!")
-                return "Request too long!"
-        self.log('\033[38;5;33m' + self.name + head + '\033[0;0m: ', end="")
+                return self.log("Request too long!", head = head)
+        self.log("",head=head, end = '')
         is_markdown = "markdown" in content.lower()
         line = ""
         for chunk in response:
@@ -161,4 +154,5 @@ class imprint:
                 pass
         self.log("\n")
         self.history_add("assistant",msg)
+        self.save()
         return head + msg
