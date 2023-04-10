@@ -5,11 +5,7 @@ from rich.console import Console
 from rich.markdown import Markdown
 from rich.table import Table
 from rich import box
-
-import time
-console = Console()
-
-
+import ghost_helper
 
 import json
 #Get options.
@@ -32,7 +28,7 @@ except KeyError:
 openai.api_key = key
 
 DEBUG = False
-TOKEN_REQUEST_LIMIT = 4096
+TOKEN_REQUEST_LIMIT = 4096-200
 
 imprint = sys.argv[1]
 print("\nInjecting Nerual imprint: "+ str(imprint)+" ...")
@@ -44,9 +40,6 @@ imprint_file =open(imprint_path)
 chat_history = eval(imprint_file.read())
 imprint_file.close()
 
-
-def token_est(history):
-    return len(str(history))/1.2
 
 def history_add(history, role, content):
     history.append({"role": role, "content": content})
@@ -95,7 +88,9 @@ while (usr_input!="eject"):
     usr_input=input('\033[38;5;33m' +"YOU"+ '\033[0;0m: ')
     if(usr_input!="eject"):
         if(DEBUG):
-            if(token_est(chat_history)<TOKEN_REQUEST_LIMIT):
+            print("Total token:", ghost_helper.token_est(chat_history))
+
+            if(ghost_helper.token_est(chat_history)<TOKEN_REQUEST_LIMIT):
                 token_outbound_count = 0
                 chat(chat_history, usr_input)
             else:
@@ -104,7 +99,7 @@ while (usr_input!="eject"):
                 chat(chat_history, usr_input)
         else:
             try:      
-                if(token_est(chat_history)<TOKEN_REQUEST_LIMIT):
+                if(ghost_helper.token_est(chat_history)<TOKEN_REQUEST_LIMIT):
                     token_outbound_count = 0
                     chat(chat_history, usr_input)
                 else:

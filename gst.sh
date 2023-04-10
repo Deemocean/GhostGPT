@@ -55,7 +55,7 @@ do
             ;;
 
         "[Config] Keys")
-            python3 config/config.py config
+            python config/config.py config
             config
             ;;
 

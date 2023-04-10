@@ -5,7 +5,7 @@ from telegram import Update, InputMediaPhoto
 from telegram.constants import ParseMode
 from telegram.helpers import escape_markdown
 from telegram.ext import filters, MessageHandler, ApplicationBuilder, CommandHandler, ContextTypes
-
+import ghost_helper
 import json
 #Get options.
 config_dict = {}
@@ -35,7 +35,7 @@ except KeyError:
 openai.api_key = key
 TOKEN = tg_token
 
-TOKEN_REQUEST_LIMIT = 4096
+TOKEN_REQUEST_LIMIT = 4096-200
 token_outbound_count = 0
 
 imprint = sys.argv[1]
@@ -48,8 +48,6 @@ imprint_file =open(imprint_path)
 chat_history = eval(imprint_file.read())
 imprint_file.close()
 
-def token_est(history):
-    return len(str(history))
 
 def history_add(history, role, content):
     history.append({"role": role, "content": content})
@@ -81,8 +79,6 @@ def wipe_history(history,path):
     save(history,path)
     return history
 
-def token_est(history):
-    return len(str(history))/1.0
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -97,7 +93,7 @@ async def gst(update: Update, context: ContextTypes.DEFAULT_TYPE):
     global chat_history
     usr_input = update.effective_message.text[5:]
     try:
-        if(token_est(chat_history)<TOKEN_REQUEST_LIMIT):
+        if(ghost_helper.token_est(chat_history)<TOKEN_REQUEST_LIMIT):
             token_outbound_count = 0
             resp = chat(chat_history, usr_input)
         else:
