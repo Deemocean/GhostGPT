@@ -1,5 +1,15 @@
 import openai
 import sys
+from rich.live import Live
+from rich.console import Console
+from rich.markdown import Markdown
+from rich.table import Table
+from rich import box
+
+import time
+console = Console()
+
+
 
 import json
 #Get options.
@@ -21,7 +31,7 @@ except KeyError:
     exit()
 openai.api_key = key
 
-
+DEBUG = False
 TOKEN_REQUEST_LIMIT = 4096
 
 imprint = sys.argv[1]
@@ -50,18 +60,22 @@ def chat(history,content):
         messages=unanswered_history,
         temperature=0,
         stream=True)
-    msg = ""
     print('\033[38;5;33m' +"GHOST"+ '\033[0;0m: ', end='')
-    for chunk in response:
-        try:
-            chunk_message = chunk['choices'][0]['delta']['content']
-            msg = msg + chunk_message
-            print(chunk_message, end='', flush=True)
-        except KeyError:
-            pass
-        
-    print('',end='\n')
-    
+
+    with Live(auto_refresh=False, vertical_overflow="visible") as live:
+        print('',end='\n') #maybe a rich bug, can't update the first token
+        msg = ""
+        for chunk in response:
+            try:
+                chunk_message = chunk['choices'][0]['delta']['content']
+                msg += chunk_message
+
+                table = Table(show_header=False, box=box.ROUNDED)
+                table.add_row(Markdown(msg))
+                live.update(table, refresh=True)
+            except KeyError:
+                pass
+
     history_add(history, "assistant",(msg))
     save(history,imprint_path)
 
@@ -80,8 +94,7 @@ usr_input=""
 while (usr_input!="eject"):
     usr_input=input('\033[38;5;33m' +"YOU"+ '\033[0;0m: ')
     if(usr_input!="eject"):
-       
-        try:      
+        if(DEBUG):
             if(token_est(chat_history)<TOKEN_REQUEST_LIMIT):
                 token_outbound_count = 0
                 chat(chat_history, usr_input)
@@ -89,6 +102,18 @@ while (usr_input!="eject"):
                 token_outbound_count = token_outbound_count + 1
                 chat_history = rm_history(chat_history,imprint_path,token_outbound_count)
                 chat(chat_history, usr_input)
-        except:
-            print("GHOST: -_- ERROR") #More useful messages in the future?
+        else:
+            try:      
+                if(token_est(chat_history)<TOKEN_REQUEST_LIMIT):
+                    token_outbound_count = 0
+                    chat(chat_history, usr_input)
+                else:
+                    token_outbound_count = token_outbound_count + 1
+                    chat_history = rm_history(chat_history,imprint_path,token_outbound_count)
+                    chat(chat_history, usr_input)
+            except:
+                print("GHOST: -_- ERROR") #More useful messages in the future?
+
+
+
 
