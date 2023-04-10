@@ -86,9 +86,9 @@ logging.basicConfig(
 )
 
 async def menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await context.bot.send_message(chat_id=update.effective_chat.id, text="/gst--talk to ghost /imgc--generate img from Dall-E /wipe wipe ghost memory")
+    await context.bot.send_message(chat_id=update.effective_chat.id, text="/g--talk to ghost /imgc--generate img from Dall-E /wipe wipe ghost memory")
 
-async def gst(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def g(update: Update, context: ContextTypes.DEFAULT_TYPE):
     global token_outbound_count
     global chat_history
     usr_input = update.effective_message.text[5:]
@@ -160,12 +160,12 @@ if __name__ == '__main__':
     application = ApplicationBuilder().token(TOKEN).build()
     
     start_handler = CommandHandler('menu', menu)
-    gst_handler = CommandHandler('gst', gst)
+    g_handler = CommandHandler('g', g)
     imgc_handler = CommandHandler('imgc', imgc)
     wipe_handler = CommandHandler('wipe', wipe)
 
     application.add_handler(start_handler)
-    application.add_handler(gst_handler)
+    application.add_handler(g_handler)
     application.add_handler(imgc_handler)
     application.add_handler(wipe_handler)
     
