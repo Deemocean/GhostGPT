@@ -39,8 +39,7 @@ In the menu, select `[Config] Keys`, and fill in the necessary API keys:
 
 
 ## Ghost in the Shell
-
-![ezgif com-gif-maker (1)](https://user-images.githubusercontent.com/39002684/227814450-e8487c1b-6615-419a-a370-341000788714.gif)
+![ezgif com-video-to-gif](https://user-images.githubusercontent.com/39002684/230958924-3e76204c-a41e-4c6a-bec7-3a155b05fd83.gif)
 
 ## Ghost in the Telegram
 It is easy to deploy Ghost onto linux servers, more features with editing imprints in telegram client, and UI is in progress :)
