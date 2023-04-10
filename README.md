@@ -43,9 +43,10 @@ In the menu, select `[Config] Keys`, and fill in the necessary API keys:
 
 ## Ghost in the Telegram
 It is easy to deploy Ghost onto linux servers, more features with editing imprints in telegram client, and UI is in progress :)
-As here we are going to call either the chatbot or DALL-E through commands `/gst`(ghost) and `/imgc`(image create), group chat is natually supported 
+As here we are going to call either the chatbot or DALL-E through commands `/g`(ghost) and `/imgc`(image create), group chat is natually supported 
 
-<img width="607" alt="Screenshot 2023-03-01 at 8 27 37 PM" src="https://user-images.githubusercontent.com/39002684/222307122-82ddcd05-540d-4a72-a359-677469f69ac6.png">
+<img width="623" alt="Screenshot 2023-04-10 at 2 56 29 PM" src="https://user-images.githubusercontent.com/39002684/230973489-bb274ea6-f341-4f85-907a-5c5c90863d5a.png">
+
 
 <img width="440" alt="Screenshot 2023-03-05 at 7 30 08 PM" src="https://user-images.githubusercontent.com/39002684/222995232-5d1348e3-4c4c-4131-ba30-91fc903df6a9.png">
 
