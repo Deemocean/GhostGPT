@@ -91,7 +91,7 @@ async def menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def g(update: Update, context: ContextTypes.DEFAULT_TYPE):
     global token_outbound_count
     global chat_history
-    usr_input = update.effective_message.text[5:]
+    usr_input = update.effective_message.text[3:]
     try:
         if(ghost_helper.token_est(chat_history)<TOKEN_REQUEST_LIMIT):
             token_outbound_count = 0
