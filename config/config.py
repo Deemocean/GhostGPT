@@ -4,11 +4,8 @@ import json
 import utils
 
 config_path = 'config/config.json'
+env_path = 'config/config.env'
 command = sys.argv[1]
-
-
-
-
 
 def config_keys(): 
 
@@ -43,7 +40,6 @@ def config_keys():
 
             if not is_filled:
                 #New value not in config file.
-                #opt = input("INPUT NEW " + option +  ": ")
                 opt = utils.prompt_key("INPUT NEW: ", option)
 
                 if opt == "" or opt.lower() == "delete" or opt=="none" :
@@ -84,20 +80,27 @@ def print_options():
             config_dict = json.load(config)
             utils.fill_options_table(config_dict)
             utils.options_table_print()
-        #for o in utils.options_list:
-         #   try:
-        #        utils.blue_print(o + ": " + config_dict[o])
-        #    except KeyError:
-        #        pass
     except (FileNotFoundError, json.decoder.JSONDecodeError):
         print("No config file found!")
         pass
 
-# def load_state():
-#     print(blue + "not implemented" + no_color)
+def set_env():
+    try: 
+        with open(config_path, 'r') as config:
+            config_dict = json.load(config)
+            with open(env_path, 'w') as env:
+                for c in config_dict:
+                    env.write(c + "=" + config_dict[c] + "\n")
+            
+    except (FileNotFoundError, json.decoder.JSONDecodeError):
+        pass
+
+    
 
 
 if command=="config":
         config_keys()
 elif command=="print_options":
         print_options()
+elif command == "set_env":
+        set_env()

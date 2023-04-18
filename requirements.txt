@@ -2,3 +2,6 @@ openai
 python-telegram-bot
 rich
 tiktoken
+discord
+os
+sys
