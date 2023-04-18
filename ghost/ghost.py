@@ -125,14 +125,17 @@ class imprint:
             self.history_add("user" if self.forget else "training",content)
 
         unanswered_history = self.history if self.history is not None else [{'role': 'user', 'content': content}]
-        if(self.token_est() < self.TOKEN_REQUEST_LIMIT):
-                response = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo",
-                messages=list(map(lambda entry: entry if entry["role"][0] != "t" else {'role':'user', 'content':entry['content']}, unanswered_history)),
-                temperature=0,
-                stream=True
-            )
-        else:
+        try:
+            if(self.token_est() < self.TOKEN_REQUEST_LIMIT):
+                    response = openai.ChatCompletion.create(
+                    model="gpt-3.5-turbo",
+                    messages=list(map(lambda entry: entry if entry["role"][0] != "t" else {'role':'user', 'content':entry['content']}, unanswered_history)),
+                    temperature=0,
+                    stream=True
+                )
+            else:
+                raise openai.error.InvalidRequestError 
+        except openai.error.InvalidRequestError:
             if self.history is not None:
                 self.token_outbound_count = self.token_outbound_count + 1
                 diff = self.rm_history(self.token_outbound_count)
