@@ -71,7 +71,7 @@ choose_platform(){
 
 }
 refresh(){
-    #clear
+    clear
     if [ ! -e config/config.json ];
     then echo -e "##############|First-Timer? Start with the \033[38;5;33m[Config]\033[0m option|##############"
     fi

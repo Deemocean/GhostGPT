@@ -13,7 +13,6 @@ class imprint:
     history = []
     forget = True
     TOKEN_REQUEST_LIMIT = 4096-200
-    token_factor = 1.0
     token_outbound_count = 0
     printing = True
     index = -1
@@ -28,9 +27,6 @@ class imprint:
     def markdown(self, obj, **kwargs):
         if self.printing:
             console.print(obj, **kwargs)
-
-    def within_tokens(self):
-        return len(str(self.history))/self.token_factor < self.TOKEN_REQUEST_LIMIT
     
     def __init__(self, name, printing= True):
         self.printing = printing
