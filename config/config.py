@@ -98,11 +98,9 @@ def set_env():
     
 
 
-
-match command:
-    case "config":
+if command=="config":
         config_keys()
-    case "print_options":
+elif command=="print_options":
         print_options()
-    case "set_env":
+elif command == "set_env":
         set_env()

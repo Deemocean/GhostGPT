@@ -83,5 +83,5 @@ def options_table_print():
         opts.append("\[" + i[0:len(i)-3] + "]")
 
     opts = " ".join(opts)
-    print(Align.center(opts, vertical="middle", style=b))
+    print(Align.center(opts, vertical="middle"))
     line_break("")
