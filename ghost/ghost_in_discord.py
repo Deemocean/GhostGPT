@@ -11,7 +11,7 @@ try:
 except KeyError:
     print("No openAI token found!")
     exit()
-imp = imprint.get()
+imp = imprint.get(printing = False)
 @client.event
 async def on_message(message):
     if message.content.startswith("!ghost"):

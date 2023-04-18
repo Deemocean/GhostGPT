@@ -13,6 +13,8 @@ class imprint:
     token_factor = 1.0
     token_outbound_count = 0
     printing = True
+    index = -1
+    temp = {}
     def log(self, s, head = "", **kwargs):
         if head != "" or s == "":
             s = ("\033[38;5;33m" + self.name + head + "\033[0;0m: " +  s)
@@ -83,15 +85,18 @@ class imprint:
         return self.history
 
     def rm_history(self,n):
+        temp = []
         if self.history is not None:
             init_size = len(self.history)
             for entry in self.history:
                 if n > 0 and entry["role"] == "user":
+                    temp.append(entry)
                     i = self.history.index(entry)
                 
                     try:
                         entry_after = self.history[i + 1]
                         if entry_after["role"] == "assistant":
+                            temp.append(entry_after)
                             self.history.remove(entry_after)
                             n = n - 1
                     except:
@@ -103,9 +108,12 @@ class imprint:
             return 0
     
     def delete(self):
+        i = self.index if self.index >= 0 else len(self.history) -1
         try:
-            self.history = self.history[0:(len(self.history) -1)]
-            self.history = self.history[0:(len(self.history) -1)]
+            rm = self.history.pop(i)
+            self.log("DELETED HISTORY: " + str(rm))
+            rm = self.history.pop(i-1)
+            self.log(str(rm))
         except IndexError:
             pass
 
@@ -127,7 +135,7 @@ class imprint:
             )
         except openai.error.InvalidRequestError:
             if self.history is not None:
-                self.token_outbound_count = self.token_outbound_count + 1
+                self.token_outbound_count = self.token_outbound_count + 20
                 diff = self.rm_history(self.token_outbound_count)
                 head = "[MEM FULL WARNING]"
                 if diff == 0 or self.history[len(self.history) -1]["content"] != content:
@@ -156,3 +164,5 @@ class imprint:
         self.history_add("assistant",msg)
         self.save()
         return head + msg
+
+

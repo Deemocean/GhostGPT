@@ -81,7 +81,7 @@ refresh(){
 }
 config(){
     options=("[Install] Required Libs" "[Config] Keys" "[Back]" )
-    echo -e "\033[38;5;33mGhost Version Beta 4.2\033[0m"
+    echo -e "\033[38;5;33mGhost Version Beta 4.3\033[0m"
     select opt in "${options[@]}"
         do
             case $opt in
