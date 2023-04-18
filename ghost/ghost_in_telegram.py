@@ -4,8 +4,8 @@ import logging
 from telegram import Update, InputMediaPhoto
 from telegram.constants import ParseMode
 from telegram.helpers import escape_markdown
-from telegram.ext import filters, MessageHandler, ApplicationBuilder, CommandHandler, ContextTypes
-import ghost_helper
+from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
+
 import os
 TOKEN= None
 openai.api_key = None
@@ -24,51 +24,6 @@ imp = imprint.get(printing = False)
 print("\nInjecting Nerual imprint: "+ str(imp.name)+" ...")
 print("\n*Note: type [eject] to eject imprint <"+str(imp.name)+"> from ghost")
 
-# TOKEN_REQUEST_LIMIT = 4096-200
-# token_outbound_count = 0
-
-# imprint = sys.argv[1]
-# print("\nInjecting Nerual imprint: "+ str(imprint)+" ...")
-# print("\n*Note: type [eject] to eject imprint <"+str(imprint)+"> from ghost")
-
-# imprint_path = "IMPRINTS/"+imprint+".ni"
-
-# imprint_file =open(imprint_path)
-# chat_history = eval(imprint_file.read())
-# imprint_file.close()
-
-
-# def history_add(history, role, content):
-#     history.append({"role": role, "content": content})
-#     return history
-
-
-# def chat(history,content):
-#     unanswered_history = history_add(history,"user",content)
-#     response = openai.ChatCompletion.create(
-#     model="gpt-3.5-turbo",
-#     messages=unanswered_history)
-#     msg = response['choices'][0]['message']['content']
-#     history_add(history, "assistant",msg)
-#     save(history,imprint_path)
-#     return msg
-
-# def save(history, path):
-#     nifile = open(path, "w")
-#     nifile.write(str(history))
-#     nifile.close()
-
-# def rm_history(history,path,n):
-#     shorter_history=history[n:]
-#     save(shorter_history,path)
-#     return shorter_history
-
-# def wipe_history(history,path):
-#     history=[]
-#     save(history,path)
-#     return history
-
-
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     level=logging.INFO
@@ -76,24 +31,11 @@ logging.basicConfig(
 
 async def menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await context.bot.send_message(chat_id=update.effective_chat.id, text="/g--talk to ghost /imgc--generate img from Dall-E /wipe wipe ghost memory")
-# async def g(update: Update, context: ContextTypes.DEFAULT_TYPE):
-#     global token_outbound_count
-#     global chat_history
-#     usr_input = update.effective_message.text[3:]
-#     try:
-#         if(ghost_helper.token_est(chat_history)<TOKEN_REQUEST_LIMIT):
-#             token_outbound_count = 0
-#             resp = chat(chat_history, usr_input)
-#         else:
-#             token_outbound_count = token_outbound_count + 1
-#             chat_history = rm_history(chat_history,imprint_path,token_outbound_count)
-#             resp= "[MEM FADING]"+chat(chat_history, usr_input)
-#     except:
-#         resp = "Error :("
-async def gst(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+async def g(update: Update, context: ContextTypes.DEFAULT_TYPE):
     global token_outbound_count
     global chat_history
-    usr_input = update.effective_message.text[5:]
+    usr_input = update.effective_message.text[3:]
     try:
         resp = imp.chat(usr_input)
 

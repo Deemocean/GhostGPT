@@ -71,7 +71,7 @@ choose_platform(){
 
 }
 refresh(){
-    clear
+    #clear
     if [ ! -e config/config.json ];
     then echo -e "##############|First-Timer? Start with the \033[38;5;33m[Config]\033[0m option|##############"
     fi
@@ -81,7 +81,7 @@ refresh(){
 }
 config(){
     options=("[Install] Required Libs" "[Config] Keys" "[Back]" )
-    echo -e "\033[38;5;33mGhost Version Beta 4.3\033[0m"
+    echo -e "\033[38;5;33mGhost Version Beta 5.0\033[0m"
     select opt in "${options[@]}"
         do
             case $opt in

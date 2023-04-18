@@ -3,13 +3,16 @@ from rich.console import Console
 from rich.markdown import Markdown
 import os
 import sys
+import tiktoken
+
+
 console = Console()
 class imprint:
     path = ""
     name = ""
     history = []
     forget = True
-    TOKEN_REQUEST_LIMIT = 4096
+    TOKEN_REQUEST_LIMIT = 4096-200
     token_factor = 1.0
     token_outbound_count = 0
     printing = True
@@ -126,16 +129,16 @@ class imprint:
             self.history_add("user" if self.forget else "training",content)
 
         unanswered_history = self.history if self.history is not None else [{'role': 'user', 'content': content}]
-        try: 
-            response = openai.ChatCompletion.create(
+        if(self.token_est() < self.TOKEN_REQUEST_LIMIT):
+                response = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
                 messages=list(map(lambda entry: entry if entry["role"][0] != "t" else {'role':'user', 'content':entry['content']}, unanswered_history)),
                 temperature=0,
                 stream=True
             )
-        except openai.error.InvalidRequestError:
+        else:
             if self.history is not None:
-                self.token_outbound_count = self.token_outbound_count + 20
+                self.token_outbound_count = self.token_outbound_count + 1
                 diff = self.rm_history(self.token_outbound_count)
                 head = "[MEM FULL WARNING]"
                 if diff == 0 or self.history[len(self.history) -1]["content"] != content:
@@ -164,5 +167,13 @@ class imprint:
         self.history_add("assistant",msg)
         self.save()
         return head + msg
+    
 
-
+    def token_est(self):
+        total_token=0
+        encoding = tiktoken.encoding_for_model("gpt-3.5-turbo")
+        for chat in self.history:
+            content= chat["content"]
+            num_tokens = len(encoding.encode(content))
+            total_token+=num_tokens
+        return total_token
