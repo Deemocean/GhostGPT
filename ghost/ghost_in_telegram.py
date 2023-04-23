@@ -20,7 +20,7 @@ except KeyError:
     print("No Telegram token found!")
     exit()
 
-imp = imprint.get(printing = False)
+imp = imprint.get()
 print("\nInjecting Nerual imprint: "+ str(imp.name)+" ...")
 print("\n*Note: type [eject] to eject imprint <"+str(imp.name)+"> from ghost")
 
@@ -38,7 +38,6 @@ async def g(update: Update, context: ContextTypes.DEFAULT_TYPE):
     usr_input = update.effective_message.text[3:]
     try:
         resp = imp.chat(usr_input)
-
     except Exception as e:
          resp = str(e)
 
