@@ -1,6 +1,9 @@
 import openai
 from rich.console import Console
 from rich.markdown import Markdown
+from rich.table import Table
+from rich.live import Live
+from rich import box
 import os
 import sys
 import tiktoken
@@ -17,11 +20,12 @@ class imprint:
     printing = True
     index = -1
     temp = {}
+
     def log(self, s, head = "", **kwargs):
         if head != "" or s == "":
             s = ("\033[38;5;33m" + self.name + head + "\033[0;0m: " +  s)
         if self.printing:
-            print(s, **kwargs)
+            print(s, **kwargs, end="")
         return s
     
     def markdown(self, obj, **kwargs):
@@ -126,15 +130,13 @@ class imprint:
 
         unanswered_history = self.history if self.history is not None else [{'role': 'user', 'content': content}]
         try:
-            if(self.token_est() < self.TOKEN_REQUEST_LIMIT):
-                    response = openai.ChatCompletion.create(
-                    model="gpt-3.5-turbo",
-                    messages=list(map(lambda entry: entry if entry["role"][0] != "t" else {'role':'user', 'content':entry['content']}, unanswered_history)),
-                    temperature=0,
-                    stream=True
-                )
-            else:
-                raise openai.error.InvalidRequestError 
+            response = openai.ChatCompletion.create(
+            model="gpt-4",
+            messages=list(map(lambda entry: entry if entry["role"][0] != "t" else {'role':'user', 'content':entry['content']}, unanswered_history)),
+            temperature=0,
+            stream=True
+        )
+            
         except openai.error.InvalidRequestError:
             if self.history is not None:
                 self.token_outbound_count = self.token_outbound_count + 1
@@ -147,22 +149,38 @@ class imprint:
                     return self.chat(content=None, head = head)
             else:
                 return self.log("Request too long!", head = head)
-        self.log("",head=head, end = '')
-        is_markdown = "markdown" in content.lower()
-        line = ""
-        for chunk in response:
-            try:
-                chunk_message = chunk['choices'][0]['delta']['content']
-                msg = msg + chunk_message
-                line = line + chunk_message
-                if not is_markdown:
-                    self.log(chunk_message, end = '', flush = True) 
-                elif "\n" in line:
-                    self.markdown(Markdown(line), end='')
-                    line = ""
-            except KeyError:
-                pass
-        self.log("\n")
+
+        #self.log("",head=head, end = '')
+        self.log("")
+        with Live(auto_refresh=False, vertical_overflow="visible") as live:
+            print('',end='\n') #maybe a rich bug, can't update the first token
+            msg = ""
+            for chunk in response:
+                try:
+                    chunk_message = chunk['choices'][0]['delta']['content']
+                    msg += chunk_message
+                    table = Table(show_header=False, box=box.ROUNDED)
+                    table.add_row(Markdown(msg))
+                    live.update(table, refresh=True)
+                except KeyError:
+                    pass
+
+
+        
+        # print('',end='\n')
+        # line = ""
+        # for chunk in response:
+        #     try:
+        #         chunk_message = chunk['choices'][0]['delta']['content']
+        #         msg = msg + chunk_message
+        #         line = line + chunk_message
+        #         self.markdown(Markdown(line), end='')
+        #         line=""
+        #     except KeyError:
+        #         pass
+
+        
+        #self.log("\n")
         self.history_add("assistant",msg)
         self.save()
         return head + msg
