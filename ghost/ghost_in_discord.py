@@ -14,12 +14,12 @@ except KeyError:
 imp = imprint.get(printing = False)
 @client.event
 async def on_message(message):
-    if message.content.startswith("!ghost"):
-        msg = message.content[6:]
-        if msg == "eject":
-            exit()
-        else:
-            await message.channel.send(imp.chat(msg))
+    if message.content.startswith("!g"):
+        msg = message.content[1:]
+        msg_sent =imp.chat(msg)
+        print(imp.chat(msg_sent))
+        
+        await message.channel.send(msg_sent)
 try:
     client.run(os.environ["DISCORD_TOKEN"])
 except KeyError:

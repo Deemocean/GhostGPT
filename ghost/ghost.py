@@ -136,7 +136,6 @@ class imprint:
             temperature=0,
             stream=True
         )
-            
         except openai.error.InvalidRequestError:
             if self.history is not None:
                 self.token_outbound_count = self.token_outbound_count + 1
@@ -150,7 +149,6 @@ class imprint:
             else:
                 return self.log("Request too long!", head = head)
 
-        #self.log("",head=head, end = '')
         self.log("")
         with Live(auto_refresh=False, vertical_overflow="visible") as live:
             print('',end='\n') #maybe a rich bug, can't update the first token
@@ -165,22 +163,6 @@ class imprint:
                 except KeyError:
                     pass
 
-
-        
-        # print('',end='\n')
-        # line = ""
-        # for chunk in response:
-        #     try:
-        #         chunk_message = chunk['choices'][0]['delta']['content']
-        #         msg = msg + chunk_message
-        #         line = line + chunk_message
-        #         self.markdown(Markdown(line), end='')
-        #         line=""
-        #     except KeyError:
-        #         pass
-
-        
-        #self.log("\n")
         self.history_add("assistant",msg)
         self.save()
         return head + msg
@@ -188,7 +170,7 @@ class imprint:
 
     def token_est(self):
         total_token=0
-        encoding = tiktoken.encoding_for_model("gpt-3.5-turbo")
+        encoding = tiktoken.encoding_for_model("gpt-4")
         for chat in self.history:
             content= chat["content"]
             num_tokens = len(encoding.encode(content))
