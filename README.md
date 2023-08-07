@@ -1,3 +1,10 @@
+## Note*
+The development of Ghost is paused. 
+
+openai is not opening anything interesting for its API
+
+at this point the further development of ghost is just UI changes, which again, is not interesting.
+
 # GhostGPT
 
 <img width="907" alt="Screenshot 2023-03-02 at 6 28 17 PM" src="https://user-images.githubusercontent.com/39002684/222587190-b4d033f2-b9dd-4525-bb05-fabe8b47140f.png">
